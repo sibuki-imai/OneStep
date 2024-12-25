@@ -15,14 +15,15 @@ const MenuBar = () => {
           bottom: 0,
           left: 0,
           width: '100%',
-          height: '8%',
-          backgroundColor: '#bff291', // メニューバーカラー
-          color: 'black', // アイコンカラー
+          height: '5%',
+          backgroundColor: '#D8E9F8', // メニューバーカラー
+          color: '#77A6D0', // アイコンカラー
           display: 'flex',
           justifyContent: 'space-around',
-          padding: '10px 0',
+          padding: '9% 0',
           boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.2)',
           zIndex: 1000,
+          borderRadius: '35% 35% 0 0',
         }}
       >
         {/* 各項目を均等に配置 */}
