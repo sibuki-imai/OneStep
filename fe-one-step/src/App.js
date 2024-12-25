@@ -1,10 +1,21 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './function/pages/login';
+import ItemStandard from './function/pages/itemStandard';
+import Input from './function/pages/inputpage';
+import Saving from './function/pages/savingpage';
 
 function App() {
   return (
     <BrowserRouter>
-      <App />
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/average-price" element={<ItemStandard />} />
+          <Route path="/record-input" element={<Input />} />
+          <Route path="/saving-confirmation" element={<Saving />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
