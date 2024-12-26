@@ -20,7 +20,23 @@ const Header = () => {
           zIndex: 1000,
           borderRadius: '0 0 35% 35%',
         }}
-      ></Box>
+      >
+        <Box
+          component="img"
+          src="img/icon.png"
+          alt="App Icon"
+          sx={{
+            position: 'relative',
+            top: '-10%',
+            right: '35%',
+            height: 'auto', // 高さを自動調整
+            width: '20%', // 横幅に基づいてサイズを調整
+            maxWidth: '100%', // 画面幅を超えないように制約をつける
+            objectFit: 'contain', // アスペクト比を維持
+            zIndex: 1001,
+          }}
+        />
+      </Box>
     </div>
   );
 };

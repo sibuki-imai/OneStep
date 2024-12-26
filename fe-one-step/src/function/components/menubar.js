@@ -15,7 +15,7 @@ const MenuBar = () => {
           bottom: 0,
           left: 0,
           width: '100%',
-          height: '5%',
+          height: '3%',
           backgroundColor: '#D8E9F8', // メニューバーカラー
           color: '#77A6D0', // アイコンカラー
           display: 'flex',
@@ -35,7 +35,9 @@ const MenuBar = () => {
             alignItems: 'center',
           }}
         >
-          <EditCalendarRoundedIcon sx={{ fontSize: '200%' }} />
+          <EditCalendarRoundedIcon
+            sx={{ fontSize: '200%', marginTop: '-10%' }}
+          />
           <span style={{ textAlign: 'center' }}>入力</span>
         </Box>
 
@@ -47,7 +49,7 @@ const MenuBar = () => {
             alignItems: 'center',
           }}
         >
-          <SavingsIcon sx={{ fontSize: '200%' }} />
+          <SavingsIcon sx={{ fontSize: '200%', marginTop: '-10%' }} />
           <span style={{ textAlign: 'center' }}>予算</span>
         </Box>
 
@@ -59,7 +61,7 @@ const MenuBar = () => {
             alignItems: 'center',
           }}
         >
-          <EditNoteIcon sx={{ fontSize: '200%' }} />
+          <EditNoteIcon sx={{ fontSize: '200%', marginTop: '-10%' }} />
           <span style={{ textAlign: 'center' }}>レポート</span>
         </Box>
 
@@ -71,7 +73,7 @@ const MenuBar = () => {
             alignItems: 'center',
           }}
         >
-          <PersonIcon sx={{ fontSize: '200%' }} />
+          <PersonIcon sx={{ fontSize: '200%', marginTop: '-10%' }} />
           <span style={{ textAlign: 'center' }}>ユーザ</span>
         </Box>
 
@@ -83,7 +85,7 @@ const MenuBar = () => {
             alignItems: 'center',
           }}
         >
-          <AddShoppingCartIcon sx={{ fontSize: '200%' }} />
+          <AddShoppingCartIcon sx={{ fontSize: '200%', marginTop: '-10%' }} />
           <span style={{ textAlign: 'center' }}>商品定価</span>
         </Box>
       </Box>
