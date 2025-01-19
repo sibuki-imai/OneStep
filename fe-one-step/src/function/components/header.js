@@ -5,6 +5,17 @@ const Header = () => {
     return (
         <div className="Header">
             <Box
+                component="img"
+                src="img/icon.png"
+                alt="Header Icon"
+                sx={{
+                    position: 'relative',
+                    top: '0%',
+                    width: '15%',
+                    height: '15%',
+                }}
+            />
+            {/* <Box
                 sx={{
                     verticalAlign: 'top',
                     position: 'fixed',
@@ -36,7 +47,7 @@ const Header = () => {
                         zIndex: 1001,
                     }}
                 />
-            </Box>
+            </Box> */}
         </div>
     );
 };

@@ -35,9 +35,8 @@ function InputNominal() {
         >
             <div>
                 <TextField
-                    required
-                    id="outlined-required"
-                    label=" メモ"
+                    id="outlined-helperText"
+                    label="メモ"
                     defaultValue=""
                 />
             </div>

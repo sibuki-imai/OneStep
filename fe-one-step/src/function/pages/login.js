@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import MuiButton from '../components/parts/button';
-import InputNominal from '../components/parts/inputNominal';
 
 function Login() {
     const handle = () => {
@@ -38,7 +37,6 @@ function Login() {
                     Googleでログイン
                 </MuiButton>
             </Box>
-            <InputNominal />
         </div>
     );
 }
