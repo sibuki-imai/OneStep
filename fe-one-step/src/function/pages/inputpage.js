@@ -7,25 +7,38 @@ import IconSelect from '../components/IconSelect';
 import InputNominal from '../components/parts/inputNominal';
 import InputMoney from '../components/parts/inputMoney';
 import DateDisplay from '../components/parts/dateDisplay';
+import { DateProvider } from '../joint/DateContext';
+import SendButton from '../components/parts/sendButton';
 
 function Input() {
     return (
         <div>
-            <DateDisplay />
-            <Menubar />
-            <Header />
-            <Calendar />
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'flex-start',
-                }}
-            >
+            <DateProvider>
+                <Menubar />
+                <Header />
+                <DateDisplay />
                 <InputMoney />
-                <InputNominal />
-            </Box>
-            <IconSelect />
+                <Box
+                    sx={{
+                        marginTop: '-13%',
+                        marginLeft: '85%',
+                    }}
+                >
+                    <SendButton />
+                </Box>
+
+                <Calendar />
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    <InputNominal />
+                </Box>
+                <IconSelect />
+            </DateProvider>
         </div>
     );
 }

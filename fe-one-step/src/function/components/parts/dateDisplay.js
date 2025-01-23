@@ -1,16 +1,18 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { useDate } from '../../joint/DateContext'; // useDate をインポート
 
-function DateDisplay() {
-    const displayDate = 'test';
+const DateDisplay = () => {
+    const { selectedDate } = useDate(); // useDate から selectedDate を取得
+
     return (
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '18ch' },
-                marginTop: '3%',
-                marginLeft: '2%',
+                '& .MuiTextField-root': { width: '37%' },
+                marginTop: '-16%',
+                marginLeft: '23%',
             }}
             noValidate
             autoComplete="off"
@@ -19,7 +21,11 @@ function DateDisplay() {
                 <TextField
                     id="Read Only"
                     label="日付"
-                    value={displayDate} // 安全に表示
+                    value={
+                        selectedDate
+                            ? selectedDate.toLocaleDateString()
+                            : '日付未選択'
+                    } // 安全に表示
                     slotProps={{
                         input: {
                             readOnly: true, // 読み取り専用
@@ -29,6 +35,6 @@ function DateDisplay() {
             </div>
         </Box>
     );
-}
+};
 
 export default DateDisplay;

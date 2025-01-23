@@ -9,10 +9,10 @@ const Header = () => {
                 src="img/icon.png"
                 alt="Header Icon"
                 sx={{
-                    position: 'relative',
                     top: '0%',
-                    width: '15%',
-                    height: '15%',
+                    width: '17%',
+                    height: '17%',
+                    zIndex: 1000,
                 }}
             />
             {/* <Box

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -8,6 +8,7 @@ import { jaJP } from '@mui/x-date-pickers/locales';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Box } from '@mui/system';
 import { ja } from 'date-fns/locale';
+import { useDate } from '../joint/DateContext';
 
 class DateAdapter extends AdapterDateFns {
     constructor(...args) {
@@ -75,9 +76,8 @@ CustomCalendarHeader.propTypes = {
 };
 
 const Calendar = () => {
-    const TODAY = new Date();
-    const [selectedDate, setSelectedDate] = useState(TODAY);
-    const [currentView, setCurrentView] = useState('day'); // 初期ビューを「日」に設定
+    const { selectedDate, setSelectedDate } = useDate();
+    const [currentView, setCurrentView] = React.useState('day'); // 初期ビューを「日」に設定
 
     const theme = createTheme({}, jaJP); // MUIで日本語を有効化
 
@@ -90,7 +90,7 @@ const Calendar = () => {
     return (
         <Box
             sx={{
-                marginTop: '14%',
+                marginTop: '0%',
                 marginLeft: '8%',
                 width: '80%',
                 height: '80%',
@@ -116,7 +116,7 @@ const Calendar = () => {
                                     {...props}
                                     currentView={currentView}
                                     setCurrentView={setCurrentView}
-                                    CustomCalendarHeader
+                                    // CustomCalendarHeader
                                 />
                             ),
                         }}

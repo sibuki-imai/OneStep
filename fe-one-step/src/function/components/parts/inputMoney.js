@@ -7,9 +7,11 @@ function InputMoney() {
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '10ch' },
-                marginLeft: '12%',
-                marginTop: '-3%',
+                '& .MuiTextField-root': { width: '60%' },
+                // marginLeft: '12%',
+                // marginTop: '-3%',
+                marginLeft: '55%',
+                marginTop: '-15%',
             }}
             noValidate
             autoComplete="off"

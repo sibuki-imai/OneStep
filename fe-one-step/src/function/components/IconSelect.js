@@ -1,10 +1,79 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/system';
+import PropTypes from 'prop-types';
+
+// 各アイコンデータをリスト化
+const icons = [
+    { id: 'food', src: 'img/food.png', label: '食費' },
+    { id: 'daily', src: 'img/dailyNecessities.png', label: '日用品' },
+    { id: 'clothes', src: 'img/clothes.png', label: '衣服費' },
+    { id: 'beauty', src: 'img/beauty.png', label: '美容費' },
+    { id: 'study', src: 'img/study.png', label: '学習費' },
+    { id: 'rent', src: 'img/rent.png', label: '家賃' },
+    { id: 'gas', src: 'img/gas.png', label: '熱費' },
+    { id: 'water', src: 'img/waterSupply.png', label: '水道費' },
+    { id: 'electricity', src: 'img/electricity.png', label: '光費' },
+    { id: 'communication', src: 'img/communication.png', label: '通信費' },
+    { id: 'pocket', src: 'img/pocketMoney.png', label: '小遣い' },
+    { id: 'medical', src: 'img/medicalCare.png', label: '医療費' },
+    { id: 'saving', src: 'img/saving.png', label: '貯金' },
+    { id: 'traffic', src: 'img/traffic.png', label: '交通費' },
+];
+
+// 再利用可能なアイコンコンポーネント
+const IconButton = ({ icon, onClick, isSelected }) => {
+    return (
+        <Box
+            onClick={onClick}
+            sx={{
+                width: '12%',
+                marginLeft: '6%',
+                textAlign: 'center',
+                marginTop: '3%',
+                padding: '0.5em 0.5em',
+                color: isSelected ? '#ff0059' : '#000', // 選択時の文字色
+                borderColor: isSelected ? '#ff0059' : '#000', // 選択時の外枠色
+                border: 'solid 2px', // ボーダーの太さを統一
+                borderRadius: '10px',
+                cursor: 'pointer', // マウスカーソルをポインタに
+                '&:hover': {
+                    borderColor: isSelected ? '#ff0059' : '', // ホバー時の外枠色
+                },
+            }}
+        >
+            <Box
+                component="img"
+                src={icon.src}
+                alt={`${icon.label} Icon`}
+                sx={{
+                    width: '100%',
+                    objectFit: 'contain',
+                }}
+            />
+            <span
+                style={{
+                    fontSize: '12px',
+                    display: 'block',
+                    whiteSpace: 'nowrap',
+                }}
+            >
+                {icon.label}
+            </span>
+        </Box>
+    );
+};
 
 const IconSelect = () => {
+    const [selected, setSelected] = useState(null);
+
+    const handleClick = (id) => {
+        setSelected(id); // 選択状態の更新
+        console.log(`${id} clicked`);
+    };
+
     return (
         <div>
-            <Box // 枠全体
+            <Box
                 sx={{
                     width: '80%',
                     height: '130px',
@@ -13,7 +82,7 @@ const IconSelect = () => {
                     backgroundColor: '#f0f8ff',
                     display: 'flex',
                     marginTop: '2%',
-                    borderRadius: '20px' /*角の丸み*/,
+                    borderRadius: '20px',
                 }}
             >
                 <Box
@@ -23,475 +92,26 @@ const IconSelect = () => {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    {/* 食費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/food.png"
-                            alt="Food Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
+                    {icons.map((icon) => (
+                        <IconButton
+                            key={icon.id}
+                            icon={icon}
+                            onClick={() => handleClick(icon.id)}
+                            isSelected={selected === icon.id}
                         />
-                        <span style={{ fontSize: '12px', display: 'block' }}>
-                            食費
-                        </span>
-                    </Box>
-
-                    {/* 日用雑費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/dailyNecessities.png"
-                            alt="DailyNecessities Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            日用品
-                        </span>
-                    </Box>
-
-                    {/* 衣服費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/clothes.png"
-                            alt="Clothes Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            衣服費
-                        </span>
-                    </Box>
-                    {/* 理美容費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/beauty.png"
-                            alt="Beauty Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            美容費
-                        </span>
-                    </Box>
-
-                    {/* 学習費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/study.png"
-                            alt="Study Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            学習費
-                        </span>
-                    </Box>
-
-                    {/* 家賃 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/rent.png"
-                            alt="Rent Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            家賃
-                        </span>
-                    </Box>
-
-                    {/* 熱費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/gas.png"
-                            alt="Gas Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            熱費
-                        </span>
-                    </Box>
-                    {/* 水道費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/waterSupply.png"
-                            alt="WaterSupply Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            水道費
-                        </span>
-                    </Box>
-
-                    {/* 光費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/electricity.png"
-                            alt="Electricity Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            光費
-                        </span>
-                    </Box>
-
-                    {/* 通信費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/communication.png"
-                            alt="Communication Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            通信費
-                        </span>
-                    </Box>
-                    {/*  お小遣い */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/pocketMoney.png"
-                            alt="PocketMoney Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            小遣い
-                        </span>
-                    </Box>
-                    {/*  医療費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/medicalCare.png"
-                            alt="MedicalCare Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            医療費
-                        </span>
-                    </Box>
-
-                    {/*  貯金 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/saving.png"
-                            alt="Saving Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            貯金
-                        </span>
-                    </Box>
-                    {/*  交通費 */}
-                    <Box
-                        sx={{
-                            width: '12%',
-                            marginLeft: '6%',
-                            textAlign: 'center', // 子要素を中央揃え
-                            marginTop: '3%',
-
-                            padding: '0.5em 0.5em',
-                            color: '#000' /*文字色*/,
-                            border: 'solid 1px #000' /*線*/,
-                            borderRadius: '10px' /*角の丸み*/,
-                        }}
-                    >
-                        <Box
-                            component="img"
-                            src="img/traffic.png"
-                            alt="Traffic Icon"
-                            sx={{
-                                width: '100%',
-                                objectFit: 'contain',
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontSize: '12px',
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            交通費
-                        </span>
-                    </Box>
-
-                    {/* icon終わり */}
+                    ))}
                 </Box>
             </Box>
         </div>
     );
 };
+IconButton.propTypes = {
+    icon: PropTypes.shape({
+        src: PropTypes.string.isRequired, // iconオブジェクト内のsrcプロパティ（必須）
+        label: PropTypes.string.isRequired, // iconオブジェクト内のlabelプロパティ（必須）
+    }).isRequired,
+    onClick: PropTypes.func.isRequired, // onClickは必須の関数
+    isSelected: PropTypes.bool.isRequired, // isSelectedは必須のブール値
+};
+
 export default IconSelect;

@@ -26,9 +26,11 @@ function InputNominal() {
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '18ch' },
+                '& .MuiTextField-root': { width: '94%' },
                 marginTop: '-3%',
-                marginLeft: '2%',
+                marginLeft: '13%',
+                width: '80%',
+                height: '80%',
             }}
             noValidate
             autoComplete="off"
