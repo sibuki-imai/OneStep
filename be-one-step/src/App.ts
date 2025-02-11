@@ -19,8 +19,8 @@ app.use(
 
 const port = 3001;
 if (process.env.NODE_ENV === 'development') {
-    const privateKey = fs.readFileSync('./ssl/localhost-key.pem', 'utf8');
-    const certificate = fs.readFileSync('./ssl/localhost.pem', 'utf8');
+    const privateKey = fs.readFileSync('../ssl/localhost-key.pem', 'utf8');
+    const certificate = fs.readFileSync('../ssl/localhost.pem', 'utf8');
     const credentials = { key: privateKey, cert: certificate };
 
     https.createServer(credentials, app).listen(port, () => {

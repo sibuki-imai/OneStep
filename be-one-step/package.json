@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.1",
+    "@types/sequelize": "^4.28.20",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
@@ -14,7 +16,11 @@
     "@types/cors": "^2.8.17",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "express": "^4.21.2"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0",
+    "sequelize": "^6.37.5",
+    "sequelize-cli": "^6.6.2"
   },
   "scripts": {
     "dev": "ts-node src/index.ts",
