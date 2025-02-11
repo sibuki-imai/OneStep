@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "ES2020", // 最新のJS機能を使えるように
+        "module": "CommonJS", // Node.jsはCommonJSを使用
+        "outDir": "./dist", // コンパイル後の出力フォルダ
+        "rootDir": "./src", // ソースコードのルートフォルダ
+        "strict": true, // 厳密な型チェックを有効化
+        "esModuleInterop": true, // ES6モジュールの互換性
+        "skipLibCheck": true, // 外部ライブラリの型チェックをスキップ
+        "forceConsistentCasingInFileNames": true // ファイル名の大文字小文字の一貫性を強制
+    }
+}
