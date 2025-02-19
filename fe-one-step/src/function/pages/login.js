@@ -4,8 +4,14 @@ import MuiButton from '../components/parts/button';
 
 function Login() {
     const handle = () => {
-        // window.location.href = `${process.env.REACT_APP_BE_DOMAIN}/${process.env.REACT_APP_SIGNIN}`;
-        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
+        const redirect = `${process.env.REACT_APP_FE_DOMAIN}/${process.env.REACT_APP_REDIRECT_BE}`;
+        alert(redirect);
+        window.location.href =
+            `https://accounts.google.com/o/oauth2/v2/auth?client_id=` +
+            `${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=` +
+            `${redirect}&response_type=code&scope=https%3A%2F%` +
+            `2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&access_` +
+            `type=offline&state=`;
     };
 
     return (
