@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import fs from 'fs';
-import https from 'https';
-// import userRoutes from './routes/userRoures';
+import confirmationRoutes from '../debug/confirmationRoutes'; //debug
+import userRoutes from './userRoutes';
+import authRoutes from './authRoutes';
 
 const app = express();
 
@@ -17,21 +17,10 @@ app.use(
         methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     })
 );
-// app.use('/api/user', userRoutes);
-// app.use('/api/input', inputRoutes);
-const port = 3001;
-if (process.env.NODE_ENV === 'development') {
-    const privateKey = fs.readFileSync('../ssl/localhost-key.pem', 'utf8');
-    const certificate = fs.readFileSync('../ssl/localhost.pem', 'utf8');
-    const credentials = { key: privateKey, cert: certificate };
+console.log('Appの起動');
+app.use('/debug', confirmationRoutes);
+app.use('/api/user', authRoutes);
 
-    https.createServer(credentials, app).listen(port, '0.0.0.0', () => {
-        console.log(`Server running at https://localhost:${port}`);
-    });
-} else {
-    app.listen(port, () => {
-        console.log(`Server is running on ${process.env.BE_DOMAIN}`);
-    });
-}
+// app.use('/api/input', inputRoutes);
 
 export default app;

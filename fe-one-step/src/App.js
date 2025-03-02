@@ -4,7 +4,7 @@ import Login from './function/pages/login';
 import ItemStandard from './function/pages/itemStandard';
 import Input from './function/pages/inputpage';
 import Saving from './function/pages/savingpage';
-
+import Debug from './function/pages/debug';
 function App() {
     return (
         <BrowserRouter>
@@ -17,6 +17,7 @@ function App() {
                     <Route path="/average-price" element={<ItemStandard />} />
                     <Route path="/record-input" element={<Input />} />
                     <Route path="/saving-confirmation" element={<Saving />} />
+                    <Route path="/debug" element={<Debug />} />
                 </Routes>
             </div>
         </BrowserRouter>

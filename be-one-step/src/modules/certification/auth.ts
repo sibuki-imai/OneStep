@@ -1,41 +1,15 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import CustomError from '../../../config/customError';
-import userService from './userService';
 
 dotenv.config();
-export class userController {
-    // public static async UserAdd(req: Request, res: Response) {
-    //     try {
-    //         const app = express();
-    //         app.use(express.json());
-    //         const { email, name } = req.body;
-
-    //         const result = await userService.registerUser({
-    //             email,
-    //             name,
-    //         });
-    //         res.status(200).json({
-    //             message: 'ユーザー登録が成功しました',
-    //             data: result,
-    //         });
-    //     } catch (error) {
-    //         console.error('エラーの内容:', error);
-    //         throw new CustomError({
-    //             name: '作成エラー',
-    //             message: 'エラーメッセージ:入力内容に問題があります。',
-    //             status: 400,
-    //         });
-    //     }
-    // }
-
+export class auth {
     public static async UserCertification(
         req: Request,
         res: Response
     ): Promise<void> {
         try {
-            console.log('認証開始: UserCertification');
+            // console.log('認証開始: UserCertification');
 
             const { code } = req.query;
             if (!code) {
@@ -78,19 +52,7 @@ export class userController {
                 sameSite: 'strict',
                 maxAge: expires_in * 1000, // ミリ秒に変換
             });
-            console.log('Google 認証成功: クッキーにトークンを保存');
 
-            // res.cookie('google_access_token', access_token, {
-            //     httpOnly: true,
-            //     secure: true, // HTTPS の場合 true
-            //     sameSite: 'strict',
-            //     maxAge: 3600 * 1000, // 1時間
-            // });
-
-            // console.log('Google 認証成功');
-            // res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
-
-            // 4. フロントエンドにユーザー情報を返す
             res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
         } catch (error) {
             console.error('Google SSO 認証エラー:', error);
@@ -100,8 +62,7 @@ export class userController {
 
     public static async GoogleUser(req: Request, res: Response): Promise<void> {
         try {
-            console.log('Google ユーザー情報取得開始');
-            console.log('Cookieの内容:', req.cookies);
+            // console.log('Google ユーザー情報取得開始');
 
             // 1. Cookie からアクセストークンを取得
             const access_token = req.cookies.google_access_token;
@@ -109,21 +70,19 @@ export class userController {
                 res.status(401).json({ error: 'Access token is missing' });
                 return;
             }
-            console.log('取得したアクセストークン:', access_token);
 
             // 2. Google ユーザー情報取得
-            const userInfo = await userController.fetchGoogleUser(access_token);
+            const userInfo = await auth.fetchGoogleUser(access_token);
             if (!userInfo) {
                 res.status(500).json({
                     error: 'Failed to fetch Google user info',
                 });
                 return;
             }
-
-            console.log('Google ユーザー情報取得成功:', userInfo);
+            console.log(userInfo);
 
             // 3. ユーザー情報をフロントエンドに返す
-            res.json(userInfo);
+            res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {
             console.error('Google ユーザー情報取得エラー:', error);
             res.status(500).json({ error: 'Failed to get Google user info' });
@@ -137,21 +96,15 @@ export class userController {
             const userResponse = await axios.get(GOOGLE_USERINFO_URL, {
                 headers: { Authorization: `Bearer ${access_token}` },
             });
-            console.log('Google APIへリクエスト:', GOOGLE_USERINFO_URL);
-            console.log('使用するアクセストークン:', access_token); // 追加
 
             if (!userResponse) {
                 console.log('レスポンス未取得');
-            } else {
-                console.log(userResponse);
-                console.log('絞り込み：', userResponse.data);
             }
             const { id, email, name } = userResponse.data;
             if (!id || !email || !name) {
                 return null;
             }
 
-            console.log('取得一覧:', id, ':', email, ':', name);
             return { googleId: id, email, name };
         } catch (error) {
             console.error('Google API ユーザー情報取得エラー:', error);
@@ -160,4 +113,4 @@ export class userController {
     }
 }
 
-export default userController;
+export default auth;

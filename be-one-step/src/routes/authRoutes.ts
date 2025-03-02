@@ -1,0 +1,9 @@
+import express from 'express';
+import auth from '../modules/certification/auth';
+
+const router = express.Router();
+
+router.get('/certification', auth.UserCertification);
+router.get('/information', auth.GoogleUser);
+
+export default router;
