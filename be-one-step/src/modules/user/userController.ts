@@ -6,156 +6,26 @@ import userService from './userService';
 
 dotenv.config();
 export class userController {
-    // public static async UserAdd(req: Request, res: Response) {
-    //     try {
-    //         const app = express();
-    //         app.use(express.json());
-    //         const { email, name } = req.body;
-
-    //         const result = await userService.registerUser({
-    //             email,
-    //             name,
-    //         });
-    //         res.status(200).json({
-    //             message: 'ユーザー登録が成功しました',
-    //             data: result,
-    //         });
-    //     } catch (error) {
-    //         console.error('エラーの内容:', error);
-    //         throw new CustomError({
-    //             name: '作成エラー',
-    //             message: 'エラーメッセージ:入力内容に問題があります。',
-    //             status: 400,
-    //         });
-    //     }
-    // }
-
-    public static async UserCertification(
-        req: Request,
-        res: Response
-    ): Promise<void> {
+    public static async UserAdd(req: Request, res: Response) {
         try {
-            console.log('認証開始: UserCertification');
-
-            const { code } = req.query;
-            if (!code) {
-                res.status(400).json({
-                    error: 'Authorization code is missing',
-                });
-                return;
-            }
-
-            const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
-            const redirectUri = `${process.env.BE_DOMAIN}/api/user/certification`;
-
-            // 1. 認可コードをアクセストークンに交換
-            const tokenResponse = await axios.post(GOOGLE_TOKEN_URL, null, {
-                params: {
-                    code,
-                    client_id: process.env.GOOGLE_CLIENT_ID,
-                    client_secret: process.env.GOOGLE_CLIENT_SECRET,
-                    redirect_uri: redirectUri,
-                    grant_type: 'authorization_code',
-                },
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
+            const app = express();
+            app.use(express.json());
+            const { email, name } = req.body;
+            const result = await userService.registerUser({
+                email,
+                name,
             });
-
-            const { access_token, expires_in } = tokenResponse.data;
-            if (!access_token) {
-                console.error('アクセストークン取得失敗');
-                res.status(500).json({
-                    error: 'Failed to obtain access token',
-                });
-                return;
-            }
-
-            // 2. Google ユーザー情報取得
-            res.cookie('google_access_token', access_token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: expires_in * 1000, // ミリ秒に変換
+            res.status(200).json({
+                message: 'ユーザー登録が成功しました',
+                data: result,
             });
-            console.log('Google 認証成功: クッキーにトークンを保存');
-
-            // res.cookie('google_access_token', access_token, {
-            //     httpOnly: true,
-            //     secure: true, // HTTPS の場合 true
-            //     sameSite: 'strict',
-            //     maxAge: 3600 * 1000, // 1時間
-            // });
-
-            // console.log('Google 認証成功');
-            // res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
-
-            // 4. フロントエンドにユーザー情報を返す
-            res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
         } catch (error) {
-            console.error('Google SSO 認証エラー:', error);
-            res.status(500).json({ error: 'Google認証に失敗しました' });
-        }
-    }
-
-    public static async GoogleUser(req: Request, res: Response): Promise<void> {
-        try {
-            console.log('Google ユーザー情報取得開始');
-            console.log('Cookieの内容:', req.cookies);
-
-            // 1. Cookie からアクセストークンを取得
-            const access_token = req.cookies.google_access_token;
-            if (!access_token) {
-                res.status(401).json({ error: 'Access token is missing' });
-                return;
-            }
-            console.log('取得したアクセストークン:', access_token);
-
-            // 2. Google ユーザー情報取得
-            const userInfo = await userController.fetchGoogleUser(access_token);
-            if (!userInfo) {
-                res.status(500).json({
-                    error: 'Failed to fetch Google user info',
-                });
-                return;
-            }
-
-            console.log('Google ユーザー情報取得成功:', userInfo);
-
-            // 3. ユーザー情報をフロントエンドに返す
-            res.json(userInfo);
-        } catch (error) {
-            console.error('Google ユーザー情報取得エラー:', error);
-            res.status(500).json({ error: 'Failed to get Google user info' });
-        }
-    }
-
-    private static async fetchGoogleUser(access_token: string) {
-        try {
-            const GOOGLE_USERINFO_URL =
-                'https://www.googleapis.com/oauth2/v2/userinfo';
-            const userResponse = await axios.get(GOOGLE_USERINFO_URL, {
-                headers: { Authorization: `Bearer ${access_token}` },
+            console.error('エラーの内容:', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
             });
-            console.log('Google APIへリクエスト:', GOOGLE_USERINFO_URL);
-            console.log('使用するアクセストークン:', access_token); // 追加
-
-            if (!userResponse) {
-                console.log('レスポンス未取得');
-            } else {
-                console.log(userResponse);
-                console.log('絞り込み：', userResponse.data);
-            }
-            const { id, email, name } = userResponse.data;
-            if (!id || !email || !name) {
-                return null;
-            }
-
-            console.log('取得一覧:', id, ':', email, ':', name);
-            return { googleId: id, email, name };
-        } catch (error) {
-            console.error('Google API ユーザー情報取得エラー:', error);
-            return null;
         }
     }
 }

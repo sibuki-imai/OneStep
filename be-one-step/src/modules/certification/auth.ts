@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import User from '../../models/userModel';
 
 dotenv.config();
 export class auth {
@@ -80,8 +81,18 @@ export class auth {
                 return;
             }
             console.log(userInfo);
+            const openId = userInfo.googleId;
 
-            // 3. ユーザー情報をフロントエンドに返す
+            const judgment = await User.findOne({
+                where: { unique_user_id: openId },
+            });
+
+            console.log(judgment);
+            if (judgment) {
+                const email = userInfo.email;
+                const name = userInfo.email;
+            }
+
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {
             console.error('Google ユーザー情報取得エラー:', error);
