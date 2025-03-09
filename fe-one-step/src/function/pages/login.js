@@ -14,6 +14,7 @@ function Login() {
             `https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email` +
             `&access_type=offline&state=`;
     };
+
     const debug = () => {
         window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/debug`;
     };
@@ -31,7 +32,7 @@ function Login() {
             >
                 <Box
                     component="img"
-                    src="img/icon.png"
+                    src="/img/icon.png"
                     alt="App Icon"
                     sx={{
                         marginLeft: '3%',

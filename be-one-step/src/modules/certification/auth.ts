@@ -51,7 +51,7 @@ export class auth {
                 httpOnly: true,
                 secure: true,
                 sameSite: 'strict',
-                maxAge: expires_in * 1000, // ミリ秒に変換
+                maxAge: 30 * 60 * 1000,
             });
 
             res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
@@ -88,9 +88,9 @@ export class auth {
             });
 
             console.log(judgment);
-            if (judgment) {
-                const email = userInfo.email;
-                const name = userInfo.email;
+            if (!judgment) {
+                res.redirect(`${process.env.FE_DOMAIN}/account/registration`);
+                return;
             }
 
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
@@ -120,6 +120,39 @@ export class auth {
         } catch (error) {
             console.error('Google API ユーザー情報取得エラー:', error);
             return null;
+        }
+    }
+
+    public static async UserInformation(
+        req: Request,
+        res: Response
+    ): Promise<void> {
+        try {
+            const access_token = req.cookies.google_access_token;
+            if (!access_token) {
+                res.status(401).json({ error: 'Access token is missing' });
+                return;
+            }
+            const GOOGLE_USERINFO_URL =
+                'https://www.googleapis.com/oauth2/v2/userinfo';
+            const userResponse = await axios.get(GOOGLE_USERINFO_URL, {
+                headers: { Authorization: `Bearer ${access_token}` },
+            });
+            if (!userResponse) {
+                console.log('レスポンス未取得');
+            }
+            const { id, email, name } = userResponse.data;
+            console.log('ID', id);
+            console.log('Email', email);
+            console.log('Name', name);
+            res.status(200).json({
+                UserId: id,
+                UserEmail: email,
+                UserName: name,
+            });
+        } catch (error) {
+            console.error('Google API ユーザー情報取得エラー:', error);
+            res.status(400).json({ error: '情報取得エラー' });
         }
     }
 }
