@@ -11,6 +11,7 @@ function AccountRegistration() {
     const [userId, setUserId] = useState('');
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const [invitationCode, setInvitationCode] = useState('');
 
     const userget = async () => {
         try {
@@ -21,6 +22,8 @@ function AccountRegistration() {
             console.log(response);
 
             setUserName(response.data.UserName);
+            setUserId(response.data.UserId);
+            setUserEmail(response.data.UserEmail);
         } catch (error) {
             console.error('ユーザー情報取得エラー:', error);
 
@@ -38,10 +41,16 @@ function AccountRegistration() {
             invitationCode: invitationCode,
         };
         const registration = await axios.post(
-            `${process.env.REACT_APP_BE_DOMAIN}/api/user/basic/information`,
-            { paylod },
+            `${process.env.REACT_APP_BE_DOMAIN}/api/user/setting/registration`,
+            paylod,
             { withCredentials: true }
         );
+        console.log('返却状況', registration);
+        if (registration.status === 200) {
+            window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
+        } else {
+            window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/errorpage`;
+        }
     };
 
     return (
@@ -79,16 +88,31 @@ function AccountRegistration() {
                 <br />
                 登録ボタンをクリックしてください
             </h5>
-            <TextField
-                required
-                id="filled-required"
-                label="必須"
-                defaultValue=""
-                variant="filled"
-            />
-            <MuiButton type="button" onClick={handle}>
-                Googleで登録する
-            </MuiButton>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column', // 縦方向に並べる
+                    alignItems: 'center', // 水平方向の中央揃え
+                }}
+            >
+                <TextField
+                    required
+                    id="filled-required"
+                    label="必須"
+                    value={invitationCode}
+                    onChange={(e) => setInvitationCode(e.target.value)}
+                    variant="filled"
+                    sx={{ marginBottom: '10px' }} // 下の余白を少し作る
+                />
+                <MuiButton
+                    type="button"
+                    onClick={handle}
+                    sx={{ marginTop: '10px' }}
+                    disabled={!userName}
+                >
+                    Googleで登録する
+                </MuiButton>
+            </Box>
         </div>
     );
 }

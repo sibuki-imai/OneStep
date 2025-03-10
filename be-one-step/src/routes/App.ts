@@ -20,6 +20,7 @@ app.use(
 console.log('Appの起動');
 app.use('/debug', confirmationRoutes);
 app.use('/api/user', authRoutes);
+app.use('/api/user/setting', userRoutes);
 
 // app.use('/api/input', inputRoutes);
 

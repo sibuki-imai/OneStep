@@ -3,17 +3,32 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import CustomError from '../../../config/customError';
 import userService from './userService';
-
+import User from '../../models/userModel';
 dotenv.config();
 export class userController {
-    public static async UserAdd(req: Request, res: Response) {
+    public static async Registration(
+        req: Request,
+        res: Response
+    ): Promise<void> {
         try {
-            const app = express();
-            app.use(express.json());
-            const { email, name } = req.body;
+            const { userId, userName, userEmail, invitationCode } = req.body;
+            const judgment = await User.findOne({
+                where: { unique_user_id: userId },
+            });
+
+            if (judgment) {
+                throw new CustomError({
+                    name: '作成エラー',
+                    message: '既に作成済みです',
+                    status: 400,
+                });
+            }
+
             const result = await userService.registerUser({
-                email,
-                name,
+                userId,
+                userName,
+                userEmail,
+                invitationCode,
             });
             res.status(200).json({
                 message: 'ユーザー登録が成功しました',

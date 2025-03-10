@@ -37,7 +37,7 @@ export class auth {
                 },
             });
 
-            const { access_token, expires_in } = tokenResponse.data;
+            const { access_token } = tokenResponse.data;
             if (!access_token) {
                 console.error('アクセストークン取得失敗');
                 res.status(500).json({
@@ -80,23 +80,33 @@ export class auth {
                 });
                 return;
             }
-            console.log(userInfo);
+            // console.log(userInfo);
             const openId = userInfo.googleId;
 
             const judgment = await User.findOne({
                 where: { unique_user_id: openId },
             });
 
-            console.log(judgment);
+            res.cookie('uniqueUserID', openId, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: 60 * 24 * 60 * 60 * 1000,
+                //60*60*1000 ->1h
+                //24*60*60*1000 ->24h
+            });
+
             if (!judgment) {
+                console.log('アカウント登録判定');
                 res.redirect(`${process.env.FE_DOMAIN}/account/registration`);
                 return;
             }
-
+            console.log(`ログイン判定`);
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {
             console.error('Google ユーザー情報取得エラー:', error);
             res.status(500).json({ error: 'Failed to get Google user info' });
+            res.redirect(`${process.env.FE_DOMAIN}/errorpage`);
         }
     }
 
@@ -142,9 +152,7 @@ export class auth {
                 console.log('レスポンス未取得');
             }
             const { id, email, name } = userResponse.data;
-            console.log('ID', id);
-            console.log('Email', email);
-            console.log('Name', name);
+
             res.status(200).json({
                 UserId: id,
                 UserEmail: email,

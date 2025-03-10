@@ -5,10 +5,11 @@ import CustomError from '../../../config/customError';
 // userテーブルの型定義
 interface UserType {
     unique_user_id: String;
-    email: String;
     name: string;
+    email: String;
     passkey: string;
-    authority_flag: Number;
+    authority_flag: boolean;
+    registration_flag: boolean;
     created_at: Date;
     updated_at: Date;
     deleted_at?: Date | null; // ソフトデリートされた場合の削除日時、nullの場合は削除されていない
