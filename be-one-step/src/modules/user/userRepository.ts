@@ -7,7 +7,7 @@ interface UserType {
     unique_user_id: String;
     name: string;
     email: String;
-    passkey: string;
+    invitation_id: number;
     authority_flag: boolean;
     registration_flag: boolean;
     created_at: Date;

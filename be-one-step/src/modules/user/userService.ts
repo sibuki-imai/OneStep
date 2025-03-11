@@ -9,7 +9,7 @@ export class userService {
         userId: string;
         userName: string;
         userEmail: string;
-        invitationCode: string;
+        invitationCode: number;
     }) {
         const transaction = await sequelize.transaction();
 
@@ -19,7 +19,7 @@ export class userService {
                     unique_user_id: userData.userId,
                     name: userData.userName,
                     email: userData.userEmail,
-                    passkey: userData.invitationCode,
+                    invitation_id: userData.invitationCode,
                     authority_flag: false,
                     registration_flag: false,
                 },

@@ -9,18 +9,12 @@ const seedUser = async () => {
         // 仮データの挿入
         await User.bulkCreate([
             {
-                unique_user_id: '00000000-0000-0000-0000-000000000000',
+                unique_user_id: `${process.env.ADM_UNIQUE}`,
                 email: 'ad.min@jp',
                 name: 'あどみん',
-                passkey: '000-000',
-                authority_flag: 7,
-            },
-            {
-                unique_user_id: '550e8400-e29b-41d4-a716-446655440001',
-                email: 'gavi.brown@jp',
-                name: '山田太郎',
-                passkey: '000-001',
-                authority_flag: 0,
+                invitation_id: 1,
+                authority_flag: true,
+                registration_flag: true,
             },
         ]);
 

@@ -17,11 +17,14 @@ const sequelize = new Sequelize(
 
 const runSeeders = async (): Promise<void> => {
     // 各シーダーのインポート（必要な初期データを挿入するスクリプト）
-    // const { default: userSeeder } = await import('../seeders/userSeeder');
-    // const { default: seedamount } = await import('../seeders/userInputSeeder');
+    const { default: invitationSeeder } = await import(
+        '../src/seeders/invitationSeeder'
+    );
+    const { default: userSeeder } = await import('../src/seeders/userSeeder');
+
     // 各シーダーの実行、初期データ挿入（挿入順）
-    // await userSeeder();
-    // await seedamount();
+    await invitationSeeder();
+    await userSeeder();
 };
 
 const syncDatabase = async (): Promise<void> => {
