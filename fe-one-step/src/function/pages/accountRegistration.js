@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import MuiButton from '../components/parts/button';
 
 function AccountRegistration() {
@@ -12,6 +14,7 @@ function AccountRegistration() {
     const [userName, setUserName] = useState('');
     const [userEmail, setUserEmail] = useState('');
     const [invitationCode, setInvitationCode] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const userget = async () => {
         try {
@@ -34,27 +37,58 @@ function AccountRegistration() {
         userget();
     }, []);
     const handle = async () => {
-        const paylod = {
+        setErrorMessage(''); // エラーリセット
+        const payload = {
             userId: userId,
             userName: userName,
             userEmail: userEmail,
             invitationCode: invitationCode,
         };
-        const registration = await axios.post(
-            `${process.env.REACT_APP_BE_DOMAIN}/api/user/setting/registration`,
-            paylod,
-            { withCredentials: true }
-        );
-        console.log('返却状況', registration);
-        if (registration.status === 200) {
-            window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
-        } else {
-            window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/errorpage`;
+        try {
+            const registration = await axios.post(
+                `${process.env.REACT_APP_BE_DOMAIN}/api/user/setting/registration`,
+                payload,
+                { withCredentials: true }
+            );
+            console.log('返却状況', registration);
+            if (registration.status === 200) {
+                window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
+            }
+        } catch (error) {
+            if (error.response) {
+                console.log('エラー詳細:', error.response);
+            }
+            if (error.response.status === 400 && error.response.data.message) {
+                setErrorMessage(error.response.data.message);
+            } else {
+                window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/errorpage`;
+            }
         }
     };
 
     return (
         <div>
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 'auto',
+                    minWidth: '300px', // 幅の最小値を設定
+                    maxWidth: '80%', // 画面幅に応じた最大幅
+                    zIndex: 1500, // 他の要素より前面に表示
+                }}
+            >
+                {errorMessage && (
+                    <Stack spacing={2}>
+                        <Alert severity="error" sx={{ textAlign: 'center' }}>
+                            {errorMessage}
+                        </Alert>
+                    </Stack>
+                )}
+            </Box>
+
             <Box
                 sx={{
                     display: 'flex', // 横並びを指定
@@ -108,7 +142,7 @@ function AccountRegistration() {
                     type="button"
                     onClick={handle}
                     sx={{ marginTop: '10px' }}
-                    disabled={!userName}
+                    disabled={!userName || !invitationCode}
                 >
                     Googleで登録する
                 </MuiButton>

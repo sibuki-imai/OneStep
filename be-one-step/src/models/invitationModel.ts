@@ -15,7 +15,7 @@ const Invitation = pool.define(
             unique: true, // 一意制約を設定する
         },
 
-        use_flag: {
+        unused_flag: {
             type: DataTypes.BOOLEAN,
             allowNull: false, // 必須
         },

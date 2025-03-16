@@ -10,11 +10,19 @@ const seedInvitation = async () => {
         await Invitation.bulkCreate([
             {
                 invitation_code: `${process.env.ADM_PASS}`,
-                use_flag: false,
+                unused_flag: false,
             },
             {
                 invitation_code: `${process.env.USER_PASS}`,
-                use_flag: true,
+                unused_flag: true,
+            },
+            {
+                invitation_code: `${process.env.USER_TEST1}`,
+                unused_flag: true,
+            },
+            {
+                invitation_code: `${process.env.USER_TEST2}`,
+                unused_flag: false,
             },
         ]);
 

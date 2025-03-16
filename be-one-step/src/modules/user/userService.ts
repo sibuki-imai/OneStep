@@ -9,7 +9,8 @@ export class userService {
         userId: string;
         userName: string;
         userEmail: string;
-        invitationCode: number;
+        invitationCode: string;
+        invitationNumber: number;
     }) {
         const transaction = await sequelize.transaction();
 
@@ -19,9 +20,17 @@ export class userService {
                     unique_user_id: userData.userId,
                     name: userData.userName,
                     email: userData.userEmail,
-                    invitation_id: userData.invitationCode,
+                    invitation_id: userData.invitationNumber,
                     authority_flag: false,
                     registration_flag: false,
+                },
+                { transaction }
+            );
+            const unusedFlagUpdate = await userRepository.unusedFlagUpdate(
+                {
+                    invitation_id: userData.invitationNumber,
+                    invitation_code: userData.invitationCode,
+                    unused_flag: false,
                 },
                 { transaction }
             );
@@ -29,7 +38,7 @@ export class userService {
             // トランザクションをコミット
             await transaction.commit();
 
-            return { user };
+            return { user, unusedFlagUpdate };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
             await transaction.rollback();
