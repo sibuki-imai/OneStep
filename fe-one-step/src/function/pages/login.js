@@ -4,8 +4,19 @@ import MuiButton from '../components/parts/button';
 
 function Login() {
     const handle = () => {
-        // window.location.href = `${process.env.REACT_APP_BE_DOMAIN}/${process.env.REACT_APP_SIGNIN}`;
-        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
+        const redirect = `${process.env.REACT_APP_BE_DOMAIN}/${process.env.REACT_APP_REDIRECT_BE}`;
+        alert(redirect);
+        window.location.href =
+            `https://accounts.google.com/o/oauth2/v2/auth?client_id=` +
+            `${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=` +
+            `${redirect}&response_type=code&scope=` +
+            `https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20` +
+            `https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email` +
+            `&access_type=offline&state=`;
+    };
+
+    const debug = () => {
+        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/debug`;
     };
 
     return (
@@ -21,7 +32,7 @@ function Login() {
             >
                 <Box
                     component="img"
-                    src="img/icon.png"
+                    src="/img/icon.png"
                     alt="App Icon"
                     sx={{
                         marginLeft: '3%',
@@ -35,6 +46,11 @@ function Login() {
             <Box sx={{ marginLeft: '15%' }}>
                 <MuiButton type="button" onClick={handle}>
                     Googleでログイン
+                </MuiButton>
+            </Box>
+            <Box>
+                <MuiButton type="button" onClick={debug}>
+                    debug用
                 </MuiButton>
             </Box>
         </div>

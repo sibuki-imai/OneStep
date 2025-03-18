@@ -1,4 +1,3 @@
-// import { v4 as uuidv4 } from 'uuid';
 import sequelize from '../../../config/database';
 import CustomError from '../../../config/customError';
 import User from '../../models/userModel';
@@ -6,13 +5,32 @@ import userRepository from './userRepository';
 
 export class userService {
     // FEから受信する型宣言
-    static async registerUser(userData: { email: string; name: string }) {
+    static async registerUser(userData: {
+        userId: string;
+        userName: string;
+        userEmail: string;
+        invitationCode: string;
+        invitationNumber: number;
+    }) {
         const transaction = await sequelize.transaction();
+
         try {
             const user = await userRepository.createUser(
                 {
-                    email: userData.email,
-                    name: userData.name,
+                    unique_user_id: userData.userId,
+                    name: userData.userName,
+                    email: userData.userEmail,
+                    invitation_id: userData.invitationNumber,
+                    authority_flag: false,
+                    registration_flag: false,
+                },
+                { transaction }
+            );
+            const unusedFlagUpdate = await userRepository.unusedFlagUpdate(
+                {
+                    invitation_id: userData.invitationNumber,
+                    invitation_code: userData.invitationCode,
+                    unused_flag: false,
                 },
                 { transaction }
             );
@@ -20,7 +38,7 @@ export class userService {
             // トランザクションをコミット
             await transaction.commit();
 
-            return { user };
+            return { user, unusedFlagUpdate };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
             await transaction.rollback();
