@@ -7,6 +7,7 @@ import Saving from './function/pages/savingpage';
 import Debug from './function/pages/debug'; // 削除
 import Registration from './function/pages/accountRegistration';
 import ErrorPage from './function/pages/errorpage';
+import TutorialPage from './function/pages/tutorialpage';
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                         element={<Registration />}
                     />
                     <Route path="/errorpage" element={<ErrorPage />} />
+                    <Route path="/tutorial" element={<TutorialPage />} />
                 </Routes>
             </div>
         </BrowserRouter>

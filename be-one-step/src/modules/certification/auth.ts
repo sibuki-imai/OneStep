@@ -85,6 +85,7 @@ export class auth {
 
             const judgment = await User.findOne({
                 where: { unique_user_id: openId },
+                attributes: ['unique_user_id', 'registration_flag'],
             });
 
             res.cookie('uniqueUserID', openId, {
@@ -102,6 +103,12 @@ export class auth {
                 return;
             }
             console.log(`ログイン判定`);
+            const registrationFlag = judgment?.dataValues.registration_flag;
+
+            console.log('テストFLAG', registrationFlag);
+            if (registrationFlag === false) {
+                res.redirect(`${process.env.FE_DOMAIN}/tutorial`);
+            }
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {
             console.error('Google ユーザー情報取得エラー:', error);

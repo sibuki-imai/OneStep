@@ -52,7 +52,7 @@ function AccountRegistration() {
             );
             console.log('返却状況', registration);
             if (registration.status === 200) {
-                window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
+                window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/tutorial`;
             }
         } catch (error) {
             if (error.response) {
@@ -82,7 +82,12 @@ function AccountRegistration() {
             >
                 {errorMessage && (
                     <Stack spacing={2}>
-                        <Alert severity="error" sx={{ textAlign: 'center' }}>
+                        <Alert
+                            severity="error"
+                            sx={{
+                                textAlign: 'center',
+                            }}
+                        >
                             {errorMessage}
                         </Alert>
                     </Stack>
