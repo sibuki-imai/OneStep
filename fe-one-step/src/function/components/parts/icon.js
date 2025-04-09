@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import Box from '@mui/material/Box';
 
-function Errorpage() {
+export default function BasicIcon() {
     return (
         <div>
             <Box
@@ -21,15 +21,8 @@ function Errorpage() {
                         zIndex: 999,
                     }}
                 />
+                <h1 style={{ fontSize: '300%', margin: '3%' }}>執事</h1>
             </Box>
-
-            <h5 style={{ textAlign: 'center' }}>
-                エラーが発生しました。
-                <br />
-                再度ログインをお願いします。
-            </h5>
         </div>
     );
 }
-
-export default Errorpage;

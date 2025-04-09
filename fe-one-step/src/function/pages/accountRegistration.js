@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import MuiButton from '../components/parts/button';
+import BasicIcon from '../components/parts/icon';
 
 function AccountRegistration() {
     // 【state】ユーザー情報を保存する
@@ -94,24 +95,8 @@ function AccountRegistration() {
                 )}
             </Box>
 
-            <Box
-                sx={{
-                    display: 'flex', // 横並びを指定
-                    alignItems: 'center', // 垂直方向の中央揃え
-                    gap: 2, // 要素間の間隔
-                    marginLeft: '10%',
-                }}
-            >
-                <Box
-                    component="img"
-                    src="/img/icon.png"
-                    alt="App Icon"
-                    sx={{
-                        marginLeft: '3%',
-                        width: '21%',
-                        zIndex: 999,
-                    }}
-                />
+            <Box>
+                <BasicIcon />
             </Box>
             <Box sx={{ padding: '20px', textAlign: 'center' }}>
                 <Typography variant="h5">

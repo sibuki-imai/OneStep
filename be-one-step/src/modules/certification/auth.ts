@@ -108,6 +108,7 @@ export class auth {
             console.log('テストFLAG', registrationFlag);
             if (registrationFlag === false) {
                 res.redirect(`${process.env.FE_DOMAIN}/tutorial`);
+                return;
             }
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {

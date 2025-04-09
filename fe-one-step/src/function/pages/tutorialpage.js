@@ -1,34 +1,21 @@
 import React from 'react';
 // import axios from 'axios';
 import Box from '@mui/material/Box';
+import BasicIcon from '../components/parts/icon';
+import InputList from '../components/parts/inputList';
 
 function AccountRegistration() {
     return (
         <div>
-            <Box
-                sx={{
-                    display: 'flex', // 横並びを指定
-                    alignItems: 'center', // 垂直方向の中央揃え
-                    gap: 2, // 要素間の間隔
-                    marginLeft: '10%',
-                }}
-            >
-                <Box
-                    component="img"
-                    src="/img/icon.png"
-                    alt="App Icon"
-                    sx={{
-                        marginLeft: '3%',
-                        width: '21%',
-                        zIndex: 999,
-                    }}
-                />
+            <Box>
+                <BasicIcon />
             </Box>
             <h5 style={{ textAlign: 'center' }}>
-                説明PAGE
+                名目の変更、名目の追加・削除を
                 <br />
-                説明を入力
+                行ってください。
             </h5>
+            <InputList defaultValue="食品" />
         </div>
     );
 }

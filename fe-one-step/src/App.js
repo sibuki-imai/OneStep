@@ -8,6 +8,7 @@ import Debug from './function/pages/debug'; // 削除
 import Registration from './function/pages/accountRegistration';
 import ErrorPage from './function/pages/errorpage';
 import TutorialPage from './function/pages/tutorialpage';
+import Donkit from './function/pages/SimpleSortablePage';
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                     />
                     <Route path="/errorpage" element={<ErrorPage />} />
                     <Route path="/tutorial" element={<TutorialPage />} />
+                    <Route path="/donkit" element={<Donkit />} />
                 </Routes>
             </div>
         </BrowserRouter>
