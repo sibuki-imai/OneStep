@@ -32,7 +32,7 @@ app.use('/api/user/setting', userRoutes);
 //         if (err instanceof CustomError) {
 //             console.error('カスタムエラー:', err);
 
-//             // ✅ リダイレクトURLを返す
+//             //  リダイレクトURLを返す
 //             res.status(err.status || 400).json({
 //                 redirectUrl: `${
 //                     process.env.FE_DOMAIN
