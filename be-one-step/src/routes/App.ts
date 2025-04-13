@@ -5,6 +5,7 @@ import CustomError from '../../config/customError';
 import confirmationRoutes from '../debug/confirmationRoutes'; //debug
 import userRoutes from './userRoutes';
 import authRoutes from './authRoutes';
+import iconRoutes from './iconCustomRoutes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ console.log('Appの起動');
 app.use('/debug', confirmationRoutes);
 app.use('/api/user', authRoutes);
 app.use('/api/user/setting', userRoutes);
+app.use('/api/icon', iconRoutes);
 
 // app.use(
 //     (
