@@ -16,13 +16,7 @@ export class userController {
             const passcheck = await Invitation.findOne({
                 where: { invitation_code: invitationCode },
             });
-            // if (!passcheck) {
-            // throw new CustomError({
-            //     name: '招待コードエラー',
-            //     message: '招待コードが異なります。',
-            //     status: 400,
-            // });
-            // }
+
             if (!passcheck) {
                 console.log('招待コードが異なります');
                 res.status(400).json({

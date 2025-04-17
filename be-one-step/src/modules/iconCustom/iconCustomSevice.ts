@@ -6,7 +6,7 @@ export class iconService {
     // FEから受信する型宣言
     static async iconRegistration(iconRegistration: {
         // 受け取る変数名：型;
-        icon: number;
+        iconID: number;
         naming: string;
         amount: number;
         saving: number;
@@ -17,7 +17,7 @@ export class iconService {
             const demo = await iconRepository.iconRegistration(
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
-                    icon_id: iconRegistration.icon,
+                    // icon_id: iconRegistration.iconId,
                     icon_naming: iconRegistration.naming,
                     fixed_amount: iconRegistration.amount,
                     user_saving: iconRegistration.saving,

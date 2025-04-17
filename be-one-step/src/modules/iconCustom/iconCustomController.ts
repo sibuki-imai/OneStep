@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import iconService from './iconCustomSevice';
+import Icon from '../../models/iconModel';
 
 dotenv.config();
 export class iconController {
@@ -9,9 +10,24 @@ export class iconController {
         res: Response
     ): Promise<void> {
         try {
-            const { icon, naming, amount, saving } = req.body;
+            const { iconName, naming, amount, saving } = req.body;
+
+            const iconId = await Icon.findOne({
+                where: { icon_image_name: iconName },
+                attributes: ['icon_id'],
+            });
+
+            if (!iconId) {
+                res.status(202).json({
+                    message: 'iconが取得できませんでした',
+                });
+                return;
+            }
+            console.log('出力', iconId.dataValues.icon_id);
+            const iconID = iconId.dataValues.icon_id;
+
             const result = await iconService.iconRegistration({
-                icon,
+                iconID,
                 naming,
                 amount,
                 saving,

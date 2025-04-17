@@ -6,7 +6,7 @@ import CustomError from '../../../config/customError';
 // userテーブルの型定義
 interface RegistrationType {
     // カラム名:　型名；
-    icon_id: number;
+    // icon_id: number;
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
