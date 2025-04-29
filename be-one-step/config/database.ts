@@ -22,11 +22,15 @@ const runSeeders = async (): Promise<void> => {
     );
     const { default: userSeeder } = await import('../src/seeders/userSeeder');
     const { default: iconSeeder } = await import('../src/seeders/iconSeeder');
+    const { default: custoIconSeeder } = await import(
+        '../src/seeders/customIconSeeder'
+    );
 
     // 各シーダーの実行、初期データ挿入（挿入順）
     await invitationSeeder();
     await userSeeder();
     await iconSeeder();
+    await custoIconSeeder();
 };
 
 const syncDatabase = async (): Promise<void> => {

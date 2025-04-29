@@ -1,7 +1,7 @@
 import sequelize from '../../../config/database';
 import CustomError from '../../../config/customError';
-import User from '../../models/userModel';
 import userRepository from './userRepository';
+import iconCustomRepository from '../iconCustom/iconCustomRepository';
 
 export class userService {
     // FEから受信する型宣言
@@ -35,10 +35,15 @@ export class userService {
                 { transaction }
             );
 
+            const beginning = await iconCustomRepository.userBeginning(
+                { unique_user_id: userData.userId },
+                { transaction }
+            );
+
             // トランザクションをコミット
             await transaction.commit();
 
-            return { user, unusedFlagUpdate };
+            return { user, unusedFlagUpdate, beginning };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
             await transaction.rollback();

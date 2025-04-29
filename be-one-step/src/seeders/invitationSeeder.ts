@@ -1,4 +1,4 @@
-import Invitation from '../models/invitationModel'; // Userモデルのインポート
+import Invitation from '../models/invitationModel'; // モデルのインポート
 
 // UserTBに初期データを挿入する関数
 const seedInvitation = async () => {
@@ -14,7 +14,7 @@ const seedInvitation = async () => {
             },
             {
                 invitation_code: `${process.env.USER_PASS}`,
-                unused_flag: true,
+                unused_flag: false,
             },
             {
                 invitation_code: `${process.env.USER_TEST1}`,

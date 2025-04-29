@@ -44,15 +44,6 @@ const UserCustom = pool.define(
             type: DataTypes.INTEGER, //符号付
         },
 
-        authority_flag: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false, // 必須
-        },
-        registration_flag: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false, // 必須
-        },
-
         created_at: {
             type: DataTypes.DATE,
             allowNull: false, // 必須

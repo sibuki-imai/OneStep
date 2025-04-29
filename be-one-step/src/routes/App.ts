@@ -11,6 +11,7 @@ const app = express();
 
 app.use(cookieParser()); // cookieの受け付け
 app.use(express.json());
+
 app.use(
     cors({
         origin: [`${process.env.BE_DOMAIN}`, `${process.env.FE_DOMAIN}`], // 許可する通信元

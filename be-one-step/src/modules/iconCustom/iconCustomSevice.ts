@@ -1,12 +1,14 @@
 import sequelize from '../../../config/database';
 import CustomError from '../../../config/customError';
-import iconRepository from './iconCustomRepository';
+import iconCustomRepository from './iconCustomRepository';
+import CustomIcon from '../../models/iconCustomModel';
 
-export class iconService {
+export class iconCustomService {
     // FEから受信する型宣言
     static async iconRegistration(iconRegistration: {
         // 受け取る変数名：型;
-        iconID: number;
+        userId: string;
+        iconId: number;
         naming: string;
         amount: number;
         saving: number;
@@ -14,23 +16,33 @@ export class iconService {
         const transaction = await sequelize.transaction();
 
         try {
-            const demo = await iconRepository.iconRegistration(
-                {
-                    // DBカラム名： 受け取ったJSON名.中身名
-                    // icon_id: iconRegistration.iconId,
-                    icon_naming: iconRegistration.naming,
-                    fixed_amount: iconRegistration.amount,
-                    user_saving: iconRegistration.saving,
-                },
-                { transaction }
-            );
+            const judgment = await CustomIcon.findOne({
+                where: { unique_user_id: iconRegistration.userId },
+                attributes: ['user_icon_number'],
+                order: [['user_icon_number', 'DESC']],
+            });
+            // console.log('テスト', judgment?.dataValues.user_icon_number);
+            const userIconNumber = judgment?.dataValues.user_icon_number + 1;
+            const customIconRegistration =
+                await iconCustomRepository.iconRegistration(
+                    {
+                        // DBカラム名： 受け取ったJSON名.中身名
+                        unique_user_id: iconRegistration.userId,
+                        icon_id: iconRegistration.iconId,
+                        user_icon_number: userIconNumber,
+                        icon_naming: iconRegistration.naming,
+                        fixed_amount: iconRegistration.amount,
+                        user_saving: iconRegistration.saving,
+                    },
+                    { transaction }
+                );
 
             // トランザクションをコミット
             await transaction.commit();
 
             return {
                 //返す変数名
-                demo,
+                customIconRegistration,
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
@@ -50,4 +62,4 @@ export class iconService {
     }
 }
 
-export default iconService;
+export default iconCustomService;

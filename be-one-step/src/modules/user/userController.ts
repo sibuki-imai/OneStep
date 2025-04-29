@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express';
-import axios from 'axios';
 import dotenv from 'dotenv';
 import CustomError from '../../../config/customError';
 import userService from './userService';
 import User from '../../models/userModel';
 import Invitation from '../../models/invitationModel';
+
 dotenv.config();
 export class userController {
     public static async Registration(
@@ -25,18 +25,21 @@ export class userController {
                 return;
             }
 
-            const judgment = await User.findOne({
+            const judgmentId = await User.findOne({
                 where: { unique_user_id: userId },
             });
 
-            // if (judgment) {
-            // throw new CustomError({
-            //     name: '作成エラー',
-            //     message: '既に作成済みです',
-            //     status: 400,
-            // });
-            // }
-            if (judgment) {
+            if (judgmentId) {
+                console.log('こちらのアカウントは作成済みです');
+                res.status(400).json({
+                    message: 'こちらのアカウントは作成済みです',
+                });
+                return;
+            }
+            const judgmentEmail = await User.findOne({
+                where: { email: userEmail },
+            });
+            if (judgmentEmail) {
                 console.log('こちらのアカウントは作成済みです');
                 res.status(400).json({
                     message: 'こちらのアカウントは作成済みです',
@@ -48,14 +51,6 @@ export class userController {
                 where: { invitation_code: invitationCode, unused_flag: true },
                 attributes: ['invitation_id', 'invitation_code', 'unused_flag'],
             });
-            // if (!usecheck) {
-            // throw new CustomError({
-            //     name: '招待コードエラー',
-            //     message: '招待コードは使用済みです。',
-            //     status: 400,
-            // });
-            // }
-            // console.log('usercheck：', usecheck?.dataValues);
 
             if (!usecheck) {
                 console.log('入力された招待コードは使用済みです');

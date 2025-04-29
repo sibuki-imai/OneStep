@@ -1,4 +1,4 @@
-import Icon from '../models/iconModel'; // Userモデルのインポート
+import Icon from '../models/iconModel'; // モデルのインポート
 
 // UserTBに初期データを挿入する関数
 const seedIcon = async () => {
@@ -57,12 +57,12 @@ const seedIcon = async () => {
                 icon_path: 'img/medicalCare.png',
             },
             {
-                icon_image_name: '貯金',
-                icon_path: 'img/saving.png',
-            },
-            {
                 icon_image_name: '交通費',
                 icon_path: 'img/traffic.png',
+            },
+            {
+                icon_image_name: '貯金',
+                icon_path: 'img/saving.png',
             },
         ]);
 

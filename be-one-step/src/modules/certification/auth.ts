@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
+import CryptoJS from 'crypto-js';
 import User from '../../models/userModel';
 
 dotenv.config();
@@ -45,14 +46,32 @@ export class auth {
                 });
                 return;
             }
+            // アクセストークン暗号化
+            const encryptedAccessTokey = CryptoJS.AES.encrypt(
+                access_token,
+                `${process.env.COOKIE_VALUE_TOKEN}`
+            ).toString();
+
+            if (!encryptedAccessTokey) {
+                console.error('アクセストークン取得失敗');
+                res.status(500).json({
+                    error: 'Failed to obtain access token',
+                });
+                return;
+            }
 
             // 2. Google ユーザー情報取得
-            res.cookie('google_access_token', access_token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'strict',
-                maxAge: 30 * 60 * 1000,
-            });
+
+            res.cookie(
+                `${process.env.COOKIE_NAME_TOKEN}`,
+                encryptedAccessTokey,
+                {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'strict',
+                    maxAge: 15 * 60 * 1000,
+                }
+            );
 
             res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
         } catch (error) {
@@ -66,14 +85,20 @@ export class auth {
             // console.log('Google ユーザー情報取得開始');
 
             // 1. Cookie からアクセストークンを取得
-            const access_token = req.cookies.google_access_token;
+            const tokenName = `${process.env.COOKIE_NAME_TOKEN}`;
+            const access_token = req.cookies?.[tokenName];
             if (!access_token) {
                 res.status(401).json({ error: 'Access token is missing' });
                 return;
             }
+            const bytes = CryptoJS.AES.decrypt(
+                access_token,
+                `${process.env.COOKIE_VALUE_TOKEN}`
+            ); // 復号化
+            const AccessToken = bytes.toString(CryptoJS.enc.Utf8); // 平文に変換
 
             // 2. Google ユーザー情報取得
-            const userInfo = await auth.fetchGoogleUser(access_token);
+            const userInfo = await auth.fetchGoogleUser(AccessToken);
             if (!userInfo) {
                 res.status(500).json({
                     error: 'Failed to fetch Google user info',
@@ -88,14 +113,23 @@ export class auth {
                 attributes: ['unique_user_id', 'registration_flag'],
             });
 
-            res.cookie('uniqueUserID', openId, {
-                httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: 60 * 24 * 60 * 60 * 1000,
-                //60*60*1000 ->1h
-                //24*60*60*1000 ->24h
-            });
+            const encryptedopenId = CryptoJS.AES.encrypt(
+                openId,
+                `${process.env.COOKIE_VALUE_INDIVIDUAL}`
+            ).toString();
+
+            res.cookie(
+                `${process.env.COOKIE_NAME_INDIVIDUAL}`,
+                encryptedopenId,
+                {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'strict',
+                    maxAge: 60 * 24 * 60 * 60 * 1000,
+                    //60*60*1000 ->1h
+                    //24*60*60*1000 ->24h
+                }
+            );
 
             if (!judgment) {
                 console.log('アカウント登録判定');
@@ -146,15 +180,28 @@ export class auth {
         res: Response
     ): Promise<void> {
         try {
-            const access_token = req.cookies.google_access_token;
+            const tokenName = `${process.env.COOKIE_NAME_TOKEN}`;
+            const access_token = req.cookies?.[tokenName];
             if (!access_token) {
                 res.status(401).json({ error: 'Access token is missing' });
                 return;
             }
+
+            const bytes = CryptoJS.AES.decrypt(
+                access_token,
+                `${process.env.COOKIE_VALUE_TOKEN}`
+            ); // 復号化
+            const AccessToken = bytes.toString(CryptoJS.enc.Utf8); // 平文に変換
+
+            if (!AccessToken) {
+                console.log('SSOID取得失敗');
+                return;
+            }
+
             const GOOGLE_USERINFO_URL =
                 'https://www.googleapis.com/oauth2/v2/userinfo';
             const userResponse = await axios.get(GOOGLE_USERINFO_URL, {
-                headers: { Authorization: `Bearer ${access_token}` },
+                headers: { Authorization: `Bearer ${AccessToken}` },
             });
             if (!userResponse) {
                 console.log('レスポンス未取得');

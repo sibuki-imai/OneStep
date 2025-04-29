@@ -1,4 +1,4 @@
-import User from '../models/userModel'; // Userモデルのインポート
+import User from '../models/userModel'; // モデルのインポート
 
 // UserTBに初期データを挿入する関数
 const seedUser = async () => {
@@ -15,6 +15,15 @@ const seedUser = async () => {
                 invitation_id: 1,
                 authority_flag: true,
                 registration_flag: true,
+            },
+
+            {
+                unique_user_id: `${process.env.USER_ID}`,
+                email: `${process.env.USER_EMAIL}`,
+                name: `${process.env.USER_NAME}`,
+                invitation_id: 2,
+                authority_flag: false,
+                registration_flag: false,
             },
         ]);
 
