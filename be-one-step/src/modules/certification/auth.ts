@@ -3,6 +3,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import CryptoJS from 'crypto-js';
 import User from '../../models/userModel';
+import idAcquisition from './idAcquisition';
 
 dotenv.config();
 export class auth {
@@ -213,6 +214,25 @@ export class auth {
                 UserEmail: email,
                 UserName: name,
             });
+        } catch (error) {
+            console.error('Google API ユーザー情報取得エラー:', error);
+            res.status(400).json({ error: '情報取得エラー' });
+        }
+    }
+
+    public static async InquiryConfirmation(
+        req: Request,
+        res: Response
+    ): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            if (!userId) {
+                console.log('ID未取得');
+                res.redirect(`${process.env.BE_DOMAIN}/api/user/certification`);
+                return;
+            }
+
+            res.status(200);
         } catch (error) {
             console.error('Google API ユーザー情報取得エラー:', error);
             res.status(400).json({ error: '情報取得エラー' });

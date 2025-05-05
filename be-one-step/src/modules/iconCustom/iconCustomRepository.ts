@@ -1,3 +1,4 @@
+import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
 import CustomError from '../../../config/customError';
 
@@ -25,14 +26,25 @@ interface RegistrationType {
 interface SettingsType {
     unique_user_id: string;
 }
-
+interface pathType {
+    icon_id: number;
+    user_icon_number: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+    iconId?: {
+        icon_path: string;
+    };
+}
 // Partial型の定義
 
 export type PartialiconType = Partial<iconType>;
 export type PartialRegistrationType = Partial<RegistrationType>;
 export type PartialSettingsType = Partial<SettingsType>;
+export type PartialpathType = Partial<pathType>;
 
 class iconCustomRepository {
+    // 単発追加
     static async iconRegistration(
         data: PartialRegistrationType,
         options?: any
@@ -54,7 +66,7 @@ class iconCustomRepository {
             });
         }
     }
-
+    // 初期登録時の一括追加
     static async userBeginning(
         data: PartialSettingsType,
         options?: any
@@ -185,6 +197,65 @@ class iconCustomRepository {
             return customIcondata.map((item) =>
                 item.get()
             ) as RegistrationType[]; // 返すのは型記述の済んでいる方
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    static async currentSituation(data: PartialSettingsType) {
+        try {
+            const currentSituation = await IconCustomModel.findAll({
+                where: { unique_user_id: data.unique_user_id },
+                attributes: [
+                    'icon_id',
+                    'user_icon_number',
+                    'icon_naming',
+                    'fixed_amount',
+                    'user_saving',
+                ],
+                include: [
+                    {
+                        model: Icon,
+                        as: 'iconId',
+                        attributes: ['icon_path'], // 外部テーブルから欲しいカラム
+                    },
+                ],
+                order: [['user_icon_number', 'ASC']],
+            });
+
+            // console.log('開始');
+            // console.log(currentSituation);
+            // console.log('終了');
+            if (!currentSituation) {
+                throw new Error('情報の取得ができませんでした');
+            }
+
+            const result = currentSituation.map((item) => {
+                const custom = item.get({ plain: true }) as pathType;
+                return {
+                    ...custom,
+                    icon_path: custom.iconId?.icon_path ?? null,
+                };
+            });
+
+            const challenge = result.map((item) => ({
+                icon_id: item.icon_id,
+                user_icon_number: item.user_icon_number,
+                icon_naming: item.icon_naming,
+                fixed_amount: item.fixed_amount,
+                user_saving: item.user_saving,
+                icon_path: item.icon_path,
+            }));
+
+            // console.log('開始');
+            // console.log(challenge);
+            // console.log('終了');
+            return challenge;
         } catch (error) {
             console.error('入力内容に問題があります。(Repository)', error);
             throw new CustomError({
