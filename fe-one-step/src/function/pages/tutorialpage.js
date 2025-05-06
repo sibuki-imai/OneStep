@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import BasicIcon from '../components/parts/icon';
-import IconDisplay from '../components/parts/iconDisplay';
+import CustomIconList from '../components/customIconList';
 
 function AccountRegistration() {
     useEffect(() => {
@@ -34,7 +34,7 @@ function AccountRegistration() {
                 行ってください。
             </h5>
 
-            <IconDisplay />
+            <CustomIconList />
         </div>
     );
 }

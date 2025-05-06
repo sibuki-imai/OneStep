@@ -26,6 +26,11 @@ interface RegistrationType {
 interface SettingsType {
     unique_user_id: string;
 }
+
+interface DeleteType {
+    unique_user_id: string;
+    user_icon_number: number;
+}
 interface pathType {
     icon_id: number;
     user_icon_number: number;
@@ -42,6 +47,7 @@ export type PartialiconType = Partial<iconType>;
 export type PartialRegistrationType = Partial<RegistrationType>;
 export type PartialSettingsType = Partial<SettingsType>;
 export type PartialpathType = Partial<pathType>;
+export type PartialDeleteType = Partial<DeleteType>;
 
 class iconCustomRepository {
     // 単発追加
@@ -256,6 +262,32 @@ class iconCustomRepository {
             // console.log(challenge);
             // console.log('終了');
             return challenge;
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    // 削除
+    static async itemDelete(data: DeleteType, options?: any) {
+        try {
+            const customDeleted = await IconCustomModel.destroy({
+                where: {
+                    unique_user_id: data.unique_user_id,
+                    user_icon_number: data.user_icon_number,
+                },
+                ...options,
+            });
+
+            if (!customDeleted) {
+                throw new Error('削除項目の不一致');
+            }
+
+            return customDeleted; // get()を使用してデータを取得
         } catch (error) {
             console.error('入力内容に問題があります。(Repository)', error);
             throw new CustomError({

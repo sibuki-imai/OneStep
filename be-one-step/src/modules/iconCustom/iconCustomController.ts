@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import iconCustomService from './iconCustomSevice';
 import Icon from '../../models/iconModel';
 import idAcquisition from '../certification/idAcquisition';
+import CustomIcon from '../../models/iconCustomModel';
 
 dotenv.config();
 export class iconCustomController {
@@ -89,13 +90,25 @@ export class iconCustomController {
                 console.log('ID未取得');
                 return;
             }
+            const remainingNumber = await CustomIcon.count({
+                where: { unique_user_id: userId },
+            });
+            // console.log('件数確認', remainingNumber);
+            if (remainingNumber == 1) {
+                res.status(400).json({
+                    message: '全て削除することはできません',
+                });
+                return;
+            }
+            const deletenumber = req.body.deleteList;
             const result = await iconCustomService.itemDelete({
                 // serviceに送信する情報
                 userId,
+                deletenumber,
             });
 
             res.status(200).json({
-                message: '情報の取得に成功しました',
+                message: '削除に成功しました',
                 data: result,
             });
         } catch (error) {

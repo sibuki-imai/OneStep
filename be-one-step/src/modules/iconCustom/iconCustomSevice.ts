@@ -78,7 +78,6 @@ export class iconCustomService {
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
-            await transaction.rollback();
             console.error('情報の保存に失敗しました(Service)', error);
 
             if (error instanceof CustomError) {
@@ -93,16 +92,20 @@ export class iconCustomService {
         }
     }
 
+    //　削除
     static async itemDelete(userData: {
         // 受け取る変数名：型;
         userId: string;
+        deletenumber: number;
     }) {
         const transaction = await sequelize.transaction();
 
         try {
-            const demo = await iconCustomRepository.itemDelete(
+            const itemDelete = await iconCustomRepository.itemDelete(
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
+                    unique_user_id: userData.userId,
+                    user_icon_number: userData.deletenumber,
                 },
                 { transaction }
             );
@@ -112,7 +115,7 @@ export class iconCustomService {
 
             return {
                 //返す変数名
-                demo,
+                itemDelete,
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
