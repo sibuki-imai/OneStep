@@ -119,6 +119,59 @@ export class iconCustomController {
             return;
         }
     }
+
+    // 修正
+    public static async itemChange(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            if (!userId) {
+                console.log('ID未取得');
+                return;
+            }
+            const {
+                customId,
+                iconId,
+                userIconNumber,
+                iconNaming,
+                fixedAmount,
+                userSaving,
+            } = req.body;
+
+            const changeItem = await CustomIcon.findOne({
+                where: {
+                    unique_user_id: userId,
+                    user_custom_id: iconId,
+                },
+            });
+            if (!changeItem) {
+                console.log('項目の取得エラー');
+                res.status(400).json({
+                    message: '変更に失敗しました',
+                });
+                return;
+            }
+            const result = await iconCustomService.itemChange({
+                // serviceに送信する情報
+                userId,
+                customId,
+                iconId,
+                userIconNumber,
+                iconNaming,
+                fixedAmount,
+                userSaving,
+            });
+
+            res.status(200).json({
+                message: '変更が成功しました',
+                data: result,
+            });
+        } catch (error) {
+            res.status(400).json({
+                message: '変更に失敗しました',
+            });
+            return;
+        }
+    }
 }
 
 export default iconCustomController;

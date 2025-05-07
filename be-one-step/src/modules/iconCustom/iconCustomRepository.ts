@@ -218,6 +218,7 @@ class iconCustomRepository {
             const currentSituation = await IconCustomModel.findAll({
                 where: { unique_user_id: data.unique_user_id },
                 attributes: [
+                    'user_custom_id',
                     'icon_id',
                     'user_icon_number',
                     'icon_naming',
