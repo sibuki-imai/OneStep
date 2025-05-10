@@ -7,11 +7,15 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 // import { Button } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
+import IconDisplay from './parts/iconDisplay';
+import Modal from '@mui/material/Modal';
 
 export default function CustomIconList() {
     const [iconData, setIconData] = useState([]);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedIconId, setSelectedIconId] = useState(null);
 
     const currentSituation = async () => {
         try {
@@ -40,12 +44,12 @@ export default function CustomIconList() {
         setIconData(newData);
     };
 
-    const trashbutton = async (user_icon_number) => {
+    const trashbutton = async (user_custom_id) => {
         try {
             setSuccessMessage('');
             setErrorMessage(''); // エラーリセット
 
-            const deleteList = user_icon_number;
+            const deleteList = user_custom_id;
             console.log('テスト', deleteList);
             const itemDelete = await axios.delete(
                 `${process.env.REACT_APP_BE_DOMAIN}/api/icon/item-delete`,
@@ -64,32 +68,46 @@ export default function CustomIconList() {
         }
     };
 
-    const Iconbutton = async (user_icon_number, icon_path) => {
-        try {
-            setSuccessMessage('');
-            setErrorMessage(''); // エラーリセット
+    // const Iconbutton = async (
+    //     user_custom_id,
+    //     icon_id,
+    //     user_icon_number,
+    //     icon_naming,
+    //     fixed_amount,
+    //     user_saving
+    // ) => {
+    //     try {
+    //         setSuccessMessage('');
+    //         setErrorMessage(''); // エラーリセット
 
-            const iconformer = { user_icon_number, icon_path };
-            const iconChange = await axios.patch(
-                `${process.env.REACT_APP_BE_DOMAIN}/api/icon/item-change`,
-                { iconformer },
-                { withCredentials: true }
-            );
+    //         const payload = {
+    //             user_custom_id,
+    //             icon_id,
+    //             user_icon_number,
+    //             icon_naming,
+    //             fixed_amount,
+    //             user_saving,
+    //         };
+    //         const iconChange = await axios.patch(
+    //             `${process.env.REACT_APP_BE_DOMAIN}/api/icon/item-change`,
+    //             { payload },
+    //             { withCredentials: true }
+    //         );
 
-            if (iconChange.status === 200) {
-                setSuccessMessage(iconChange.data.message);
-                currentSituation();
-            }
-        } catch (error) {
-            console.error('Icon変更エラー:', error);
-            setErrorMessage(error.response.data.message);
-        }
-    };
+    //         if (iconChange.status === 200) {
+    //             setSuccessMessage(iconChange.data.message);
+    //             currentSituation();
+    //         }
+    //     } catch (error) {
+    //         console.error('Icon変更エラー:', error);
+    //         setErrorMessage(error.response.data.message);
+    //     }
+    // };
     return (
         <div>
             <Box
                 sx={{
-                    position: 'absolute',
+                    position: 'fixed',
                     top: '10px',
                     left: '50%',
                     transform: 'translateX(-50%)',
@@ -124,6 +142,7 @@ export default function CustomIconList() {
                     </Stack>
                 )}
             </Box>
+
             {iconData.map((item, index) => (
                 <Box
                     key={item.icon_id || index}
@@ -135,19 +154,37 @@ export default function CustomIconList() {
                         px: 2, // 横パディング
                     }}
                 >
+                    {selectedIconId === item.icon_id && openModal && (
+                        <Modal
+                            open={openModal}
+                            onClose={() => setOpenModal(false)}
+                        >
+                            <Box>
+                                <IconDisplay
+                                    iconId={item.icon_id}
+                                    onClose={() => setOpenModal(false)}
+                                    onSelectSuccess={() => {
+                                        currentSituation();
+                                        setOpenModal(false);
+                                    }}
+                                />
+                            </Box>
+                        </Modal>
+                    )}
                     <IconButton
-                        onClick={() =>
-                            Iconbutton(item.user_icon_number, item.icon_path)
-                        }
+                        onClick={() => {
+                            setSelectedIconId(item.icon_id);
+                            setOpenModal(true);
+                        }}
                     >
                         <Box
                             component="img"
                             src={item.icon_path || ''}
                             sx={{
                                 width: {
-                                    xs: '24px', // スマホ
-                                    sm: '32px', // タブレット
-                                    md: '40px', // PC
+                                    xs: '24px',
+                                    sm: '32px',
+                                    md: '40px',
                                 },
                                 height: 'auto',
                             }}
@@ -179,7 +216,7 @@ export default function CustomIconList() {
                         }
                     />
                     <IconButton
-                        onClick={() => trashbutton(item.user_icon_number)}
+                        onClick={() => trashbutton(item.user_custom_id)}
                     >
                         <TrashBox />
                     </IconButton>

@@ -105,7 +105,7 @@ export class iconCustomService {
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
                     unique_user_id: userData.userId,
-                    user_icon_number: userData.deletenumber,
+                    user_custom_id: userData.deletenumber,
                 },
                 { transaction }
             );
@@ -147,9 +147,10 @@ export class iconCustomService {
         const transaction = await sequelize.transaction();
 
         try {
-            const demo = await demoRepository.createUser(
+            const itemChange = await iconCustomRepository.itemChange(
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
+                    unique_user_id: changeitem.userId,
                     icon_id: changeitem.iconId,
                     user_icon_number: changeitem.userIconNumber,
                     icon_naming: changeitem.iconNaming,
@@ -164,7 +165,7 @@ export class iconCustomService {
 
             return {
                 //返す変数名
-                demo,
+                itemChange,
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック

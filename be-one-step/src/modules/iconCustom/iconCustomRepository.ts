@@ -23,16 +23,26 @@ interface RegistrationType {
     updated_at: Date;
     deleted_at?: Date | null; // ソフトデリートされた場合の削除日時、nullの場合は削除されていない
 }
+interface UpdateType {
+    unique_user_id: string;
+    icon_id: number;
+    user_icon_number: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+}
+
 interface SettingsType {
     unique_user_id: string;
 }
 
 interface DeleteType {
     unique_user_id: string;
-    user_icon_number: number;
+    user_custom_id: number;
 }
 interface pathType {
     icon_id: number;
+    user_custom_id: number;
     user_icon_number: number;
     icon_naming: string;
     fixed_amount: number;
@@ -48,6 +58,7 @@ export type PartialRegistrationType = Partial<RegistrationType>;
 export type PartialSettingsType = Partial<SettingsType>;
 export type PartialpathType = Partial<pathType>;
 export type PartialDeleteType = Partial<DeleteType>;
+export type PartialUpdateType = Partial<UpdateType>;
 
 class iconCustomRepository {
     // 単発追加
@@ -236,7 +247,7 @@ class iconCustomRepository {
             });
 
             // console.log('開始');
-            // console.log(currentSituation);
+            // console.log(currentSituatsion);
             // console.log('終了');
             if (!currentSituation) {
                 throw new Error('情報の取得ができませんでした');
@@ -252,6 +263,7 @@ class iconCustomRepository {
 
             const challenge = result.map((item) => ({
                 icon_id: item.icon_id,
+                user_custom_id: item.user_custom_id,
                 user_icon_number: item.user_icon_number,
                 icon_naming: item.icon_naming,
                 fixed_amount: item.fixed_amount,
@@ -279,7 +291,7 @@ class iconCustomRepository {
             const customDeleted = await IconCustomModel.destroy({
                 where: {
                     unique_user_id: data.unique_user_id,
-                    user_icon_number: data.user_icon_number,
+                    user_custom_id: data.user_custom_id,
                 },
                 ...options,
             });
@@ -289,6 +301,33 @@ class iconCustomRepository {
             }
 
             return customDeleted; // get()を使用してデータを取得
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+    // 変更
+    static async itemChange(
+        data: UpdateType,
+        options?: any
+    ): Promise<UpdateType> {
+        try {
+            const { unique_user_id, ...updateData } = data;
+            const [count, rows] = await IconCustomModel.update(updateData, {
+                where: { unique_user_id },
+                returning: true,
+                ...options,
+            });
+
+            if (count === 0) {
+                throw new Error('対象データが見つかりませんでした');
+            }
+
+            return rows[0].toJSON() as UpdateType;
         } catch (error) {
             console.error('入力内容に問題があります。(Repository)', error);
             throw new CustomError({

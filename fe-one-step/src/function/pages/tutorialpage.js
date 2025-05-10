@@ -33,7 +33,6 @@ function AccountRegistration() {
                 <br />
                 行ってください。
             </h5>
-
             <CustomIconList />
         </div>
     );

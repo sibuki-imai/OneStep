@@ -101,6 +101,18 @@ export class iconCustomController {
                 return;
             }
             const deletenumber = req.body.deleteList;
+
+            const judgment = await CustomIcon.count({
+                where: { unique_user_id: userId, user_custom_id: deletenumber },
+                attributes: ['unique_user_id', 'user_custom_id'],
+            });
+
+            if (!judgment) {
+                res.status(400).json({
+                    message: '再度ログインを行ってください',
+                });
+                return;
+            }
             const result = await iconCustomService.itemDelete({
                 // serviceに送信する情報
                 userId,
@@ -140,7 +152,7 @@ export class iconCustomController {
             const changeItem = await CustomIcon.findOne({
                 where: {
                     unique_user_id: userId,
-                    user_custom_id: iconId,
+                    user_custom_id: customId,
                 },
             });
             if (!changeItem) {
