@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js';
 async function idAcquisition(req: Request) {
     // envからcookieの名前を取得
     const COOKIE_NAME = process.env.COOKIE_NAME_INDIVIDUAL || '';
-    console.log('Cookie_name：', COOKIE_NAME);
+    // console.log('Cookie_name：', COOKIE_NAME);
 
     // cookie_Nameの値を取得
     const encryptedUniqueUserId = req.cookies?.[COOKIE_NAME];
@@ -27,7 +27,7 @@ async function idAcquisition(req: Request) {
         if (!UniqueUserId) {
             throw new Error('復号化に失敗しました');
         }
-        console.log('cookie平:', UniqueUserId);
+        // console.log('cookie平:', UniqueUserId);
         return UniqueUserId;
     } catch (error) {
         console.error('復号化エラー:', error);

@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import CustomError from '../../config/customError';
 import confirmationRoutes from '../debug/confirmationRoutes'; //debug
 import userRoutes from './userRoutes';
 import authRoutes from './authRoutes';
 import iconRoutes from './iconCustomRoutes';
+import commonIconRoutes from './commonIconRoutes';
 
 const app = express();
 
@@ -24,6 +24,7 @@ app.use('/debug', confirmationRoutes);
 app.use('/api/user', authRoutes);
 app.use('/api/user/setting', userRoutes);
 app.use('/api/icon', iconRoutes);
+app.use('/api/common/icon', commonIconRoutes);
 
 // app.use(
 //     (

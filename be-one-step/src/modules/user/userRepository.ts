@@ -25,9 +25,15 @@ interface InvitationType {
     deleted_at?: Date | null; // ソフトデリートされた場合の削除日時、nullの場合は削除されていない
 }
 
+interface UserPromotionType {
+    unique_user_id: string;
+    registration_flag: boolean;
+}
+
 // Partial型の定義
 export type PartialUserType = Partial<UserType>;
 export type PartialInvitationType = Partial<InvitationType>;
+export type PartialUserPromotionType = Partial<UserPromotionType>;
 
 class userRepository {
     static async createUser(
@@ -92,6 +98,32 @@ class userRepository {
             }
 
             return updatedInvitation.get() as InvitationType;
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    static async Promotion(
+        data: PartialUserPromotionType,
+        options?: any
+    ): Promise<boolean> {
+        try {
+            await User.update(
+                { registration_flag: true },
+                {
+                    where: {
+                        unique_user_id: data.unique_user_id,
+                    },
+                    ...options,
+                }
+            );
+
+            return true;
         } catch (error) {
             console.error('入力内容に問題があります。(Repository)', error);
             throw new CustomError({

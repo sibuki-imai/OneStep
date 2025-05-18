@@ -4,6 +4,7 @@ import CustomError from '../../../config/customError';
 import userService from './userService';
 import User from '../../models/userModel';
 import Invitation from '../../models/invitationModel';
+import idAcquisition from '../certification/idAcquisition';
 
 dotenv.config();
 export class userController {
@@ -80,6 +81,28 @@ export class userController {
                     'エラーが発生しました。時間をおいてもう一度お試しください。',
                 status: 400,
             });
+        }
+    }
+
+    public static async Promotion(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+
+            const result = await userService.Promotion({
+                // serviceに送信する情報
+                userId,
+            });
+
+            res.status(200).json({
+                message: '本登録が成功しました',
+                data: result,
+            });
+        } catch (error) {
+            console.log('設定に失敗しました', error);
+            res.status(400).json({
+                message: '設定に失敗しました',
+            });
+            return;
         }
     }
 }

@@ -6,7 +6,7 @@ import Icon from './iconModel';
 const UserCustom = pool.define(
     'UserCustom',
     {
-        user_custom_id: {
+        custom_id: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true, // 自動入力
             allowNull: false, // 必須
@@ -42,6 +42,11 @@ const UserCustom = pool.define(
         },
         user_saving: {
             type: DataTypes.INTEGER, //符号付
+            allowNull: false, // 必須
+        },
+        tentative: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false, // 必須
         },
 
         created_at: {

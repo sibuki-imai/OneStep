@@ -3,6 +3,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import CryptoJS from 'crypto-js';
 import User from '../../models/userModel';
+import idAcquisition from './idAcquisition';
 
 dotenv.config();
 export class auth {
@@ -68,7 +69,8 @@ export class auth {
                 {
                     httpOnly: true,
                     secure: true,
-                    sameSite: 'strict',
+                    // sameSite: 'strict',
+                    sameSite: 'none',
                     maxAge: 15 * 60 * 1000,
                 }
             );
@@ -86,7 +88,9 @@ export class auth {
 
             // 1. Cookie からアクセストークンを取得
             const tokenName = `${process.env.COOKIE_NAME_TOKEN}`;
+            // console.log(tokenName);
             const access_token = req.cookies?.[tokenName];
+            // console.log(access_token);
             if (!access_token) {
                 res.status(401).json({ error: 'Access token is missing' });
                 return;
@@ -213,6 +217,25 @@ export class auth {
                 UserEmail: email,
                 UserName: name,
             });
+        } catch (error) {
+            console.error('Google API ユーザー情報取得エラー:', error);
+            res.status(400).json({ error: '情報取得エラー' });
+        }
+    }
+
+    public static async InquiryConfirmation(
+        req: Request,
+        res: Response
+    ): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            if (!userId) {
+                console.log('ID未取得');
+                res.redirect(`${process.env.BE_DOMAIN}/api/user/certification`);
+                return;
+            }
+
+            res.status(200);
         } catch (error) {
             console.error('Google API ユーザー情報取得エラー:', error);
             res.status(400).json({ error: '情報取得エラー' });
