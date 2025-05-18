@@ -88,9 +88,9 @@ export class auth {
 
             // 1. Cookie からアクセストークンを取得
             const tokenName = `${process.env.COOKIE_NAME_TOKEN}`;
-            console.log(tokenName);
+            // console.log(tokenName);
             const access_token = req.cookies?.[tokenName];
-            console.log(access_token);
+            // console.log(access_token);
             if (!access_token) {
                 res.status(401).json({ error: 'Access token is missing' });
                 return;

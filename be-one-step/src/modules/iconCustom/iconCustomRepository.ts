@@ -1,6 +1,7 @@
 import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
 import CustomError from '../../../config/customError';
+import { utimes } from 'fs';
 
 interface iconType {
     // カラム名:　型名；
@@ -19,6 +20,7 @@ interface RegistrationType {
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
+    tentative: boolean;
     created_at: Date;
     updated_at: Date;
     deleted_at?: Date | null; // ソフトデリートされた場合の削除日時、nullの場合は削除されていない
@@ -30,27 +32,49 @@ interface UpdateType {
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
+    tentative: boolean;
 }
-
+interface NewListType {
+    custom_number?: number;
+    unique_user_id: string;
+    icon_id: number;
+    user_icon_number: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+    tentative: boolean;
+}
+interface UpDataListType {
+    custom_number: number;
+    unique_user_id: string;
+    icon_id: number;
+    user_icon_number: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+    tentative: boolean;
+}
 interface SettingsType {
     unique_user_id: string;
 }
 
 interface DeleteType {
     unique_user_id: string;
-    user_custom_id: number;
+    custom_id: number;
 }
 interface pathType {
     icon_id: number;
-    user_custom_id: number;
+    custom_id: number;
     user_icon_number: number;
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
+    tentative: boolean;
     iconId?: {
         icon_path: string;
     };
 }
+
 // Partial型の定義
 
 export type PartialiconType = Partial<iconType>;
@@ -59,6 +83,8 @@ export type PartialSettingsType = Partial<SettingsType>;
 export type PartialpathType = Partial<pathType>;
 export type PartialDeleteType = Partial<DeleteType>;
 export type PartialUpdateType = Partial<UpdateType>;
+export type PartialNewListType = Partial<NewListType>;
+export type PartialUpDataListType = Partial<UpDataListType>;
 
 class iconCustomRepository {
     // 単発追加
@@ -98,6 +124,7 @@ class iconCustomRepository {
                         icon_naming: '食費',
                         fixed_amount: 30000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -106,6 +133,7 @@ class iconCustomRepository {
                         icon_naming: '日用品',
                         fixed_amount: 3000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -114,6 +142,7 @@ class iconCustomRepository {
                         icon_naming: '衣服費',
                         fixed_amount: 3000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -122,6 +151,7 @@ class iconCustomRepository {
                         icon_naming: '美容費',
                         fixed_amount: 3000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -130,6 +160,7 @@ class iconCustomRepository {
                         icon_naming: '学習費',
                         fixed_amount: 5000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -138,6 +169,7 @@ class iconCustomRepository {
                         icon_naming: '家賃',
                         fixed_amount: 80000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -146,6 +178,7 @@ class iconCustomRepository {
                         icon_naming: 'ガス代',
                         fixed_amount: 3000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -154,6 +187,7 @@ class iconCustomRepository {
                         icon_naming: '水道代',
                         fixed_amount: 3000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -162,6 +196,7 @@ class iconCustomRepository {
                         icon_naming: '電気代',
                         fixed_amount: 5000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -170,6 +205,7 @@ class iconCustomRepository {
                         icon_naming: '通信費',
                         fixed_amount: 5000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -178,6 +214,7 @@ class iconCustomRepository {
                         icon_naming: '小遣い',
                         fixed_amount: 20000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -186,6 +223,7 @@ class iconCustomRepository {
                         icon_naming: '医療費',
                         fixed_amount: 10000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -194,6 +232,7 @@ class iconCustomRepository {
                         icon_naming: '交通費',
                         fixed_amount: 10000,
                         user_saving: 0,
+                        tentative: false,
                     },
                     {
                         unique_user_id: data.unique_user_id,
@@ -202,6 +241,7 @@ class iconCustomRepository {
                         icon_naming: '貯金',
                         fixed_amount: 20000,
                         user_saving: 0,
+                        tentative: false,
                     },
                 ],
                 options
@@ -229,12 +269,13 @@ class iconCustomRepository {
             const currentSituation = await IconCustomModel.findAll({
                 where: { unique_user_id: data.unique_user_id },
                 attributes: [
-                    'user_custom_id',
+                    'custom_id',
                     'icon_id',
                     'user_icon_number',
                     'icon_naming',
                     'fixed_amount',
                     'user_saving',
+                    'tentative',
                 ],
                 include: [
                     {
@@ -246,9 +287,6 @@ class iconCustomRepository {
                 order: [['user_icon_number', 'ASC']],
             });
 
-            // console.log('開始');
-            // console.log(currentSituatsion);
-            // console.log('終了');
             if (!currentSituation) {
                 throw new Error('情報の取得ができませんでした');
             }
@@ -263,12 +301,13 @@ class iconCustomRepository {
 
             const challenge = result.map((item) => ({
                 icon_id: item.icon_id,
-                user_custom_id: item.user_custom_id,
+                custom_id: item.custom_id,
                 user_icon_number: item.user_icon_number,
                 icon_naming: item.icon_naming,
                 fixed_amount: item.fixed_amount,
                 user_saving: item.user_saving,
                 icon_path: item.icon_path,
+                tentative: item.tentative,
             }));
 
             // console.log('開始');
@@ -291,7 +330,7 @@ class iconCustomRepository {
             const customDeleted = await IconCustomModel.destroy({
                 where: {
                     unique_user_id: data.unique_user_id,
-                    user_custom_id: data.user_custom_id,
+                    custom_id: data.custom_id,
                 },
                 ...options,
             });
@@ -330,6 +369,74 @@ class iconCustomRepository {
             return rows[0].toJSON() as UpdateType;
         } catch (error) {
             console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+    //配列登録(新規)
+    static async newIconCustomList(
+        data: PartialNewListType[],
+        options?: any
+    ): Promise<PartialNewListType[]> {
+        try {
+            const newCustomList = await IconCustomModel.bulkCreate(data, {
+                ...options,
+                returning: true,
+            });
+            const newListresult: PartialNewListType[] = newCustomList.map(
+                (item) => item.get({ plain: true })
+            );
+
+            return newListresult;
+        } catch (error) {
+            console.error('入力内容に問題があります。(New)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    //配列登録(上書き)
+    static async upDataIconCustomList(
+        data: PartialUpDataListType[],
+        options?: any
+    ): Promise<number> {
+        try {
+            const upDataCustomList = await Promise.all(
+                data.map((item) =>
+                    IconCustomModel.update(
+                        {
+                            icon_id: item.icon_id,
+                            icon_naming: item.icon_naming,
+                            fixed_amount: item.fixed_amount,
+                            user_saving: item.user_saving,
+                            tentative: item.tentative,
+                        }, // 更新内容
+                        {
+                            where: {
+                                unique_user_id: item.unique_user_id,
+                                custom_id: item.custom_number,
+                                user_icon_number: item.user_icon_number,
+                            },
+                            returning: true,
+                            ...options,
+                        }
+                    )
+                )
+            );
+
+            const upDataListresult = upDataCustomList
+                .map(([affectedCount]) => affectedCount)
+                .reduce((sum, count) => sum + count, 0);
+
+            return upDataListresult;
+        } catch (error) {
+            console.error('入力内容に問題があります。(UpDataUpData)', error);
             throw new CustomError({
                 name: '作成エラー',
                 message: 'エラーメッセージ:入力内容に問題があります。',

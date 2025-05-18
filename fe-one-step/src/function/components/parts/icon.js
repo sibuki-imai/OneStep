@@ -17,7 +17,11 @@ export default function BasicIcon() {
                     src="/img/icon.png"
                     alt="App Icon"
                     sx={{
-                        width: '10%',
+                        width: {
+                            xs: '60px',
+                            sm: '70px',
+                            md: '80px',
+                        },
                         zIndex: 999,
                     }}
                 />

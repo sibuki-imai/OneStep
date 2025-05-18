@@ -15,6 +15,7 @@ const seedCustomIcon = async () => {
                 icon_naming: '日用品',
                 fixed_amount: 10000,
                 user_saving: 0,
+                tentative: false,
             },
             {
                 unique_user_id: `${process.env.USER_ID}`,
@@ -23,6 +24,7 @@ const seedCustomIcon = async () => {
                 icon_naming: '災害',
                 fixed_amount: 10000,
                 user_saving: 0,
+                tentative: false,
             },
         ]);
 

@@ -1,7 +1,8 @@
 import sequelize from '../../../config/database';
 import CustomError from '../../../config/customError';
 import iconCustomRepository from './iconCustomRepository';
-import CustomIcon from '../../models/iconCustomModel';
+// import CustomIcon from '../../models/iconCustomModel';
+import nextIconNumber from './userIconNumberGet';
 
 export class iconCustomService {
     // FEから受信する型宣言
@@ -16,13 +17,10 @@ export class iconCustomService {
         const transaction = await sequelize.transaction();
 
         try {
-            const judgment = await CustomIcon.findOne({
-                where: { unique_user_id: iconRegistration.userId },
-                attributes: ['user_icon_number'],
-                order: [['user_icon_number', 'DESC']],
-            });
-            // console.log('テスト', judgment?.dataValues.user_icon_number);
-            const userIconNumber = judgment?.dataValues.user_icon_number + 1;
+            const userIconNumber = await nextIconNumber(
+                iconRegistration.userId
+            );
+
             const customIconRegistration =
                 await iconCustomRepository.iconRegistration(
                     {
@@ -105,7 +103,7 @@ export class iconCustomService {
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
                     unique_user_id: userData.userId,
-                    user_custom_id: userData.deletenumber,
+                    custom_id: userData.deletenumber,
                 },
                 { transaction }
             );
@@ -143,6 +141,7 @@ export class iconCustomService {
         iconNaming: string;
         fixedAmount: number;
         userSaving: number;
+        tentative: boolean;
     }) {
         const transaction = await sequelize.transaction();
 
@@ -156,6 +155,7 @@ export class iconCustomService {
                     icon_naming: changeitem.iconNaming,
                     fixed_amount: changeitem.fixedAmount,
                     user_saving: changeitem.userSaving,
+                    tentative: changeitem.tentative,
                 },
                 { transaction }
             );
@@ -169,6 +169,86 @@ export class iconCustomService {
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
+            await transaction.rollback();
+            console.error('情報の保存に失敗しました(Service)', error);
+
+            if (error instanceof CustomError) {
+                throw error; // CustomErrorのステータスとメッセージをそのまま投げる
+            }
+
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'データベースへの保存で問題が発生しました',
+                status: 500, // 予期しないエラーの場合は500を投げる
+            });
+        }
+    }
+
+    static async registration(registration: {
+        userId: string;
+        registrationDete: any[];
+    }) {
+        const transaction = await sequelize.transaction();
+        try {
+            const list = registration.registrationDete;
+            const Updata = list.map((item) => ({
+                ...item,
+                unique_user_id: registration.userId,
+            }));
+
+            // 新規作成リスト
+            const newList = Updata.filter((item) => item.tentative === true);
+            const judgmentNewList = newList.length;
+
+            if (judgmentNewList > 0) {
+                const userId = registration.userId;
+                const nextCustomNumber = await nextIconNumber(userId);
+
+                const numberList = Array.from(
+                    { length: judgmentNewList },
+                    (_, i) => nextCustomNumber + i
+                );
+
+                const NewNumberList = newList.map((item, index) => ({
+                    unique_user_id: item.unique_user_id,
+                    icon_id: item.icon_id,
+                    user_icon_number: numberList[index],
+                    icon_naming: item.icon_naming,
+                    fixed_amount: item.fixed_amount,
+                    user_saving: item.user_saving,
+                    tentative: false,
+                }));
+
+                // console.log('新規', NewNumberList);
+
+                await iconCustomRepository.newIconCustomList(NewNumberList, {
+                    transaction,
+                });
+            }
+
+            //上書きリスト
+            const upDataList = Updata.filter(
+                (item) => item.tentative === false
+            );
+
+            const judgmentUpDataList = upDataList.length;
+            if (judgmentUpDataList > 0) {
+                // console.log('上書き', upDataList);
+
+                await iconCustomRepository.upDataIconCustomList(upDataList, {
+                    transaction,
+                });
+            }
+            //-------
+
+            // トランザクションをコミット
+            await transaction.commit();
+            const result = true;
+            return {
+                //返す変数名
+                result,
+            };
+        } catch (error) {
             await transaction.rollback();
             console.error('情報の保存に失敗しました(Service)', error);
 

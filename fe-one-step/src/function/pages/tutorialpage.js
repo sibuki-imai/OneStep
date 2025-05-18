@@ -28,11 +28,12 @@ function AccountRegistration() {
             <Box>
                 <BasicIcon />
             </Box>
-            <h5 style={{ textAlign: 'center' }}>
+            <h3 style={{ textAlign: 'center' }}>
                 名目の変更、名目の追加・削除を
                 <br />
                 行ってください。
-            </h5>
+            </h3>
+
             <CustomIconList />
         </div>
     );

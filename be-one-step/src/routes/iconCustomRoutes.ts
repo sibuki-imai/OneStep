@@ -6,6 +6,7 @@ const router = express.Router();
 router.post('/certification', IconCustomController.conRegistration);
 router.get('/current-situation', IconCustomController.currentSituation);
 router.delete('/item-delete', IconCustomController.itemDelete);
-router.patch('/item-change', IconCustomController.itemChange);
+router.patch('/item-change', IconCustomController.itemChange); // 要動作確認
+router.patch('/list/registration', IconCustomController.registration);
 
 export default router;

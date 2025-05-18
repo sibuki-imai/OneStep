@@ -4,6 +4,7 @@ import iconCustomService from './iconCustomSevice';
 import Icon from '../../models/iconModel';
 import idAcquisition from '../certification/idAcquisition';
 import CustomIcon from '../../models/iconCustomModel';
+import { promises } from 'dns';
 
 dotenv.config();
 export class iconCustomController {
@@ -103,8 +104,8 @@ export class iconCustomController {
             const deletenumber = req.body.deleteList;
 
             const judgment = await CustomIcon.count({
-                where: { unique_user_id: userId, user_custom_id: deletenumber },
-                attributes: ['unique_user_id', 'user_custom_id'],
+                where: { unique_user_id: userId, custom_id: deletenumber },
+                attributes: ['unique_user_id', 'custom_id'],
             });
 
             if (!judgment) {
@@ -132,7 +133,7 @@ export class iconCustomController {
         }
     }
 
-    // 修正
+    // 修正（単発）
     public static async itemChange(req: Request, res: Response): Promise<void> {
         try {
             const userId = await idAcquisition(req);
@@ -147,12 +148,13 @@ export class iconCustomController {
                 iconNaming,
                 fixedAmount,
                 userSaving,
+                tentative,
             } = req.body;
 
             const changeItem = await CustomIcon.findOne({
                 where: {
                     unique_user_id: userId,
-                    user_custom_id: customId,
+                    custom_id: customId,
                 },
             });
             if (!changeItem) {
@@ -171,6 +173,7 @@ export class iconCustomController {
                 iconNaming,
                 fixedAmount,
                 userSaving,
+                tentative,
             });
 
             res.status(200).json({
@@ -180,6 +183,32 @@ export class iconCustomController {
         } catch (error) {
             res.status(400).json({
                 message: '変更に失敗しました',
+            });
+            return;
+        }
+    }
+
+    // 一括修正
+    public static async registration(
+        req: Request,
+        res: Response
+    ): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            const registrationDete = req.body.registrationList;
+
+            const result = await iconCustomService.registration({
+                userId,
+                registrationDete,
+            });
+
+            res.status(200).json({
+                message: '登録が完了しました',
+                data: result,
+            });
+        } catch (error) {
+            res.status(400).json({
+                message: '登録に失敗しました',
             });
             return;
         }

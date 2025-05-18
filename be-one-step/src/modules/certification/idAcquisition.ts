@@ -9,7 +9,7 @@ async function idAcquisition(req: Request) {
 
     // cookie_Nameの値を取得
     const encryptedUniqueUserId = req.cookies?.[COOKIE_NAME];
-    // console.log('cookie暗:', encryptedUniqueUserId);
+    console.log('cookie暗:', encryptedUniqueUserId);
 
     // cookie_Nameと同一のcookieの値がない場合拾う
     if (!encryptedUniqueUserId) {
