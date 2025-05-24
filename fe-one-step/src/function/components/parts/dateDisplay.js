@@ -10,9 +10,10 @@ const DateDisplay = () => {
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '37%' },
-                marginTop: '-16%',
-                marginLeft: '23%',
+                '& .MuiTextField-root': {
+                    width: { xs: '30vw', sm: '30vw', md: '30vw' },
+                    minWidth: '110px',
+                },
             }}
             noValidate
             autoComplete="off"
@@ -31,6 +32,7 @@ const DateDisplay = () => {
                             readOnly: true, // 読み取り専用
                         },
                     }}
+                    sx={{ border: 'none' }}
                 />
             </div>
         </Box>

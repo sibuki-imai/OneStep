@@ -1,36 +1,16 @@
-// import React from 'react';
-// import Box from '@mui/material/Box';
-
-// function InputNominal() {
-//     return (
-//         <div>
-//             <Box
-//                 sx={{
-//                     width: '100%',
-//                     objectFit: 'contain',
-//                 }}
-//             >
-//                 <span style={{ fontSize: '12px', display: 'block' }}>メモ</span>
-//                 <text></text>
-//             </Box>
-//         </div>
-//     );
-// }
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 
-function InputNominal() {
+function InputNominal({ value, onChange }) {
     return (
         <Box
             component="form"
             sx={{
-                '& .MuiTextField-root': { width: '94%' },
-                marginTop: '-3%',
-                marginLeft: '13%',
-                width: '80%',
-                height: '80%',
+                '& .MuiTextField-root': { width: '100%' },
+                width: { xs: '65vw', sm: '66vw', md: '67vw' },
+                marginTop: '3px',
             }}
             noValidate
             autoComplete="off"
@@ -39,11 +19,16 @@ function InputNominal() {
                 <TextField
                     id="outlined-helperText"
                     label="メモ"
-                    defaultValue=""
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
                 />
             </div>
         </Box>
     );
 }
 
+InputNominal.propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+};
 export default InputNominal;

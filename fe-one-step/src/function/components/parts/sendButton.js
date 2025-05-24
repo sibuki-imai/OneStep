@@ -1,22 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import Box from '@mui/material/Box';
 
-function SendButton() {
-    const handle = () => {
-        //処理
-        console.log('test');
-    };
+function SendButton({ onClick }) {
     return (
         <div>
             <Box sx={{ fontSize: 'large' }}>
                 <SendRoundedIcon
-                    sx={{ fontSize: '200%', color: '#77A6D0' }}
-                    type="button"
-                    onClick={handle}
+                    onClick={onClick}
+                    sx={{
+                        fontSize: '200%',
+                        color: '#77A6D0',
+                        cursor: 'pointer',
+                    }}
                 />
             </Box>
         </div>
     );
 }
 export default SendButton;
+
+SendButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+};
