@@ -1,18 +1,22 @@
 import React from 'react';
-function Saving() {
+import Menuber from '../components/parts/iconlogo';
+import BudegetAll from '../components/budegetAll';
+
+function budgetPage() {
     const handle = () => {
         console.log('test', `${process.env.REACT_APP_FE_DOMAIN}/record-input`);
         window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
     };
     return (
         <div>
-            <h1>保存確認</h1>
-            <h1>Coming Soon</h1>
+            <Menuber />
+            <h1>予算</h1>
             <button type="button" onClick={handle}>
                 Home遷移
             </button>
+            <BudegetAll />
         </div>
     );
 }
 
-export default Saving;
+export default budgetPage;

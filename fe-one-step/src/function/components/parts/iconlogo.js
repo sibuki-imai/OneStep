@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import EditCalendarRoundedIcon from '@mui/icons-material/EditCalendarRounded';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import SavingsIcon from '@mui/icons-material/Savings';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import PersonIcon from '@mui/icons-material/Person';
 
@@ -31,60 +32,87 @@ export default function headerIcon() {
                     }}
                 />
                 {/* 遷移各種 */}
-                <Box>
-                    <EditCalendarRoundedIcon
-                        sx={{
-                            fontSize: {
-                                xs: '25px',
-                                sm: '30px',
-                                md: '40px',
-                            },
-                            zIndex: 999,
-                        }}
-                    />
-                    <SavingsIcon
-                        sx={{
-                            fontSize: {
-                                xs: '25px',
-                                sm: '30px',
-                                md: '40px',
-                            },
-                            zIndex: 999,
-                        }}
-                    />
-                    <AddShoppingCartIcon
-                        sx={{
-                            fontSize: {
-                                xs: '25px',
-                                sm: '30px',
-                                md: '40px',
-                            },
-                            zIndex: 999,
-                        }}
-                    />
-                    <EditNoteIcon
-                        sx={{
-                            fontSize: {
-                                xs: '25px',
-                                sm: '30px',
-                                md: '40px',
-                            },
-                            zIndex: 999,
-                        }}
-                    />
-                    <PersonIcon
-                        sx={{
-                            fontSize: {
-                                xs: '25px',
-                                sm: '30px',
-                                md: '40px',
-                            },
-                            zIndex: 999,
-                        }}
-                    />
+                <Box
+                    sx={{
+                        margin: '0 0 0 auto',
+                        marginRight: '2%',
+                        display: 'flex',
+                        gap: { xs: '2vw', sm: '2vw', md: '2vw' }, // アイコン間の間隔
+                    }}
+                >
+                    {[
+                        {
+                            icon: <EditRoundedIcon />,
+                            label: '入力',
+                            to: `/record-input`,
+                        },
+                        {
+                            icon: <SavingsIcon />,
+                            label: '予算',
+                            to: `/budget`,
+                        },
+                        {
+                            icon: <EditNoteIcon />,
+                            label: 'レポート',
+                            to: `/report`,
+                        },
+                        {
+                            icon: <Inventory2RoundedIcon />,
+                            label: '備蓄品',
+                            to: `/saving-confirmation`,
+                        },
+
+                        {
+                            icon: <PersonIcon />,
+                            label: 'マイページ',
+                            value: `/my-page`,
+                        },
+                    ].map((item, index) => (
+                        <Link
+                            to={item.to}
+                            key={index}
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <Box
+                                key={index}
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    color: '#83a5c4',
+                                    '&:hover': {
+                                        color: '#4169e1',
+                                    },
+                                }}
+                            >
+                                {React.cloneElement(item.icon, {
+                                    sx: {
+                                        fontSize: {
+                                            xs: '25px',
+                                            sm: '30px',
+                                            md: '40px',
+                                        },
+                                    },
+                                })}
+                                <Box
+                                    sx={{
+                                        fontSize: {
+                                            xs: '2vw',
+                                            sm: '2vw',
+                                            md: '1vw',
+                                        },
+                                        textAlign: 'center',
+                                        color: '#56595A',
+                                    }}
+                                >
+                                    {item.label}
+                                </Box>
+                            </Box>
+                        </Link>
+                    ))}
                 </Box>
             </Box>
-            <Box
+            <Box // 下線
                 sx={{
                     marginTop: '2px',
                     width: '97vw',
