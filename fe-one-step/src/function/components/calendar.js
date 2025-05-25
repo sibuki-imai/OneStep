@@ -90,10 +90,11 @@ const Calendar = () => {
     return (
         <Box
             sx={{
-                marginTop: '0%',
-                marginLeft: '8%',
-                width: '80%',
-                height: '80%',
+                marginTop: '-30px',
+                marginLeft: { xs: '5vw', sm: '6vw', md: '10vw' },
+                width: { xs: '80vw', sm: '50vw', md: '50vw' },
+                height: { xs: '40vh', sm: '60vh', md: '60vh' },
+                maxHeight: '350px ',
             }}
         >
             <ThemeProvider theme={theme}>
@@ -119,6 +120,17 @@ const Calendar = () => {
                                     // CustomCalendarHeader
                                 />
                             ),
+                        }}
+                        sx={{
+                            scale: '0.9', // カレンダー全体の縮小
+                            '.MuiDayCalendar-weekDayLabel': {
+                                fontSize: '0.75rem',
+                            },
+                            '.MuiPickersDay-root': {
+                                fontSize: '0.8rem',
+                                width: 32,
+                                height: 32,
+                            },
                         }}
                     />
                 </LocalizationProvider>

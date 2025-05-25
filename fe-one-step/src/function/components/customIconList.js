@@ -175,8 +175,8 @@ export default function CustomIconList() {
                             gap: 2,
                             mb: 2, // 各行の間に余白
                             px: 2, // 横パディング
-                            minWidth: '800px',
-                            justifyContent: 'center',
+                            minWidth: '500px',
+                            marginLeft: '3vw',
                         }}
                     >
                         {openModal && editingIndex !== null && (
@@ -215,10 +215,11 @@ export default function CustomIconList() {
                                 src={item.icon_path || ''}
                                 sx={{
                                     width: {
-                                        xs: '24px',
-                                        sm: '32px',
-                                        md: '40px',
+                                        xs: '8vw',
+                                        sm: '5vw',
+                                        md: '3vw',
                                     },
+                                    // maxWidth: '40px',
                                     height: 'auto',
                                 }}
                             />
@@ -237,7 +238,11 @@ export default function CustomIconList() {
                                 )
                             }
                             sx={{
-                                width: 300,
+                                width: {
+                                    xs: '30vw',
+                                    sm: '30vw',
+                                    md: '30vw',
+                                },
                             }}
                         />
                         <TextField
@@ -253,7 +258,12 @@ export default function CustomIconList() {
                                 )
                             }
                             sx={{
-                                width: 300,
+                                width: {
+                                    xs: '30vw',
+                                    sm: '30vw',
+                                    md: '30vw',
+                                },
+                                maxWidth: '300px',
                             }}
                         />
                         <TextField
@@ -269,7 +279,12 @@ export default function CustomIconList() {
                                 )
                             }
                             sx={{
-                                width: 300,
+                                width: {
+                                    xs: '30vw',
+                                    sm: '30vw',
+                                    md: '30vw',
+                                },
+                                maxWidth: '300px',
                             }}
                         />
                         <IconButton onClick={() => trashbutton(item.custom_id)}>
@@ -288,14 +303,14 @@ export default function CustomIconList() {
                         borderRadius: '10px',
                         mt: 3,
                         mb: 3,
-                        width: '40vi',
+                        width: '40vw',
                         maxWidth: '150px',
                     }}
                     onClick={addButton}
                 >
                     項目の追加
                 </Button>
-                <Box sx={{ width: '20vi' }} />
+                <Box sx={{ width: '20vw', maxWidth: '300px' }} />
                 <Button
                     variant="outlined"
                     href="#outlined-buttons"
@@ -305,8 +320,9 @@ export default function CustomIconList() {
                         borderRadius: '10px',
                         mt: 3,
                         mb: 3,
-                        width: '40vi',
+                        width: '40vw',
                         backgroundColor: '#e4eff9',
+                        maxWidth: '600px',
                     }}
                 >
                     登録

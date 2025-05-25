@@ -1,12 +1,14 @@
 import React from 'react';
-function Saving() {
+import Menuber from '../components/parts/iconlogo';
+function ReportPage() {
     const handle = () => {
         console.log('test', `${process.env.REACT_APP_FE_DOMAIN}/record-input`);
         window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/record-input`;
     };
     return (
         <div>
-            <h1>保存確認</h1>
+            <Menuber />
+            <h1>レポート</h1>
             <h1>Coming Soon</h1>
             <button type="button" onClick={handle}>
                 Home遷移
@@ -15,4 +17,4 @@ function Saving() {
     );
 }
 
-export default Saving;
+export default ReportPage;
