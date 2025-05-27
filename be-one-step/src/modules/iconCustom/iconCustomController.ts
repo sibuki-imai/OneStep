@@ -5,6 +5,7 @@ import Icon from '../../models/iconModel';
 import idAcquisition from '../certification/idAcquisition';
 import CustomIcon from '../../models/iconCustomModel';
 import { promises } from 'dns';
+import { request } from 'http';
 
 dotenv.config();
 export class iconCustomController {
@@ -133,6 +134,32 @@ export class iconCustomController {
         }
     }
 
+    public static async oneGet(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            const customId = req.body.editingId;
+
+            if (!userId) {
+                console.log('ID未取得');
+                return;
+            }
+            const result = await iconCustomService.oneGet({
+                userId,
+                customId,
+            });
+
+            res.status(200).json({
+                message: '情報の取得に成功しました',
+                data: result,
+            });
+        } catch (error) {
+            console.log('情報の取得に失敗しました');
+            res.status(400).json({
+                message: '情報の取得に失敗しました',
+            });
+            // return;
+        }
+    }
     // 修正（単発）
     public static async itemChange(req: Request, res: Response): Promise<void> {
         try {

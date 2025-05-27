@@ -349,6 +349,29 @@ class iconCustomRepository {
             });
         }
     }
+
+    // 単発GET
+    static async oneGet(data: DeleteType): Promise<boolean> {
+        try {
+            // Promise<DeleteType>
+            const before = await IconCustomModel.findOne({
+                where: {
+                    unique_user_id: data.unique_user_id,
+                    user_custom_id: data.custom_id,
+                },
+            });
+            console.log('test', before);
+            return true;
+        } catch (error) {
+            console.error('取得失敗', error);
+            throw new CustomError({
+                name: '取得エラー',
+                message: 'エラーメッセージ:取得中にエラーが発生しました。',
+                status: 400,
+            });
+        }
+    }
+
     // 変更
     static async itemChange(
         data: UpdateType,
