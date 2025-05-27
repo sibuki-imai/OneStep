@@ -1,7 +1,7 @@
 import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
+import IconModel from '../../models/iconModel';
 import CustomError from '../../../config/customError';
-import { utimes } from 'fs';
 
 interface iconType {
     // カラム名:　型名；
@@ -74,6 +74,14 @@ interface pathType {
         icon_path: string;
     };
 }
+interface OneGetType {
+    custom_id: number;
+    icon_id: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+    icon_path: string;
+}
 
 // Partial型の定義
 
@@ -85,6 +93,7 @@ export type PartialDeleteType = Partial<DeleteType>;
 export type PartialUpdateType = Partial<UpdateType>;
 export type PartialNewListType = Partial<NewListType>;
 export type PartialUpDataListType = Partial<UpDataListType>;
+export type PartialOneGetType = Partial<OneGetType>;
 
 class iconCustomRepository {
     // 単発追加
@@ -357,11 +366,32 @@ class iconCustomRepository {
             const before = await IconCustomModel.findOne({
                 where: {
                     unique_user_id: data.unique_user_id,
-                    user_custom_id: data.custom_id,
+                    custom_id: data.custom_id,
                 },
+                attributes: [
+                    'custom_id',
+                    'icon_id',
+                    'icon_naming',
+                    'fixed_amount',
+                    'user_saving',
+                ],
             });
-            console.log('test', before);
-            return true;
+            if (!before) {
+                throw new Error('情報の未取得');
+            }
+            // console.log('テストテスト', before.dataValues);
+            const iconPath = await IconModel.findOne({
+                where: {
+                    icon_id: before.dataValues.icon_id,
+                },
+                attributes: ['icon_path'],
+            });
+            if (!iconPath) {
+                throw new Error('情報の未取得');
+            }
+            const result = { ...before.dataValues, ...iconPath.dataValues };
+            // console.log('確認', result);
+            return result;
         } catch (error) {
             console.error('取得失敗', error);
             throw new CustomError({

@@ -46,6 +46,7 @@ export default function CustomIcon() {
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
                     <Box>
                         <CustomIconCorrection
+                            editingId={editingIndex}
                             onClose={() => setOpenModal(false)}
                             onSelectSuccess={({ iconId, iconPath }) => {
                                 const updated = [...CustomData];
@@ -123,7 +124,7 @@ export default function CustomIcon() {
                             display: 'flex',
                             justifyContent: 'center',
                         }}
-                        onClick={hander}
+                        onClick={() => hander(item.custom_id)}
                     >
                         <EditRoundedIcon
                             sx={{ color: '#4169e1', cursor: 'pointer' }}

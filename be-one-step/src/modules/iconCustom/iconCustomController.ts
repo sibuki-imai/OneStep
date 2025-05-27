@@ -133,12 +133,12 @@ export class iconCustomController {
             return;
         }
     }
-
+    // 取得(単発)
     public static async oneGet(req: Request, res: Response): Promise<void> {
         try {
             const userId = await idAcquisition(req);
-            const customId = req.body.editingId;
-
+            const customId = Number(req.params.customid);
+            // console.log('確認', customId);
             if (!userId) {
                 console.log('ID未取得');
                 return;

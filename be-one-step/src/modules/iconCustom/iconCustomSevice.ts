@@ -139,23 +139,23 @@ export class iconCustomService {
         const transaction = await sequelize.transaction();
 
         try {
-            const itemChange = await iconCustomRepository.oneGet(
+            const result = await iconCustomRepository.oneGet({
                 // DBカラム名： 受け取ったJSON名.中身名
                 unique_user_id: getitem.userId,
                 custom_id: getitem.customId,
-            );
+            });
 
             // トランザクションをコミット
             await transaction.commit();
 
             return {
                 //返す変数名
-                itemChange,
+                result,
             };
         } catch (error) {
             // エラーが発生した場合、トランザクションをロールバック
             await transaction.rollback();
-            console.error('情報の保存に失敗しました(Service)', error);
+            console.error('情報の取得取得に失敗しました(Service)', error);
 
             if (error instanceof CustomError) {
                 throw error; // CustomErrorのステータスとメッセージをそのまま投げる

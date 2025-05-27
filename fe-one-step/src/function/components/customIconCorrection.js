@@ -13,16 +13,13 @@ export default function CustomIconCorrection({
     const fetchItem = async () => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_BE_DOMAIN}/api/icon/current-situation`,
-                { editingId },
+                `${process.env.REACT_APP_BE_DOMAIN}/api/icon/one/custom/icon/${editingId}`,
                 { withCredentials: true }
             );
-            const allItems = response.data.data.currentSituation;
-            const selected = allItems.find((d) => d.custom_id === editingId);
-            setItem({ ...selected });
+            const result = response.data.data.result;
+            setItem(result);
         } catch (error) {
             console.error('データ取得エラー:', error);
-            window.location.href = `${process.env.REACT_APP_FE_DOMAIN}`;
         }
     };
 
@@ -64,6 +61,7 @@ export default function CustomIconCorrection({
                 アイコン情報の編集
             </Typography>
 
+            {/* アイコン画像 */}
             <Box
                 component="img"
                 src={item.icon_path || ''}
@@ -71,6 +69,7 @@ export default function CustomIconCorrection({
                 sx={{ width: '80px', height: 'auto', mb: 2 }}
             />
 
+            {/* 項目名 */}
             <TextField
                 fullWidth
                 label="項目名"
@@ -81,6 +80,7 @@ export default function CustomIconCorrection({
                 sx={{ mb: 2 }}
             />
 
+            {/* 残高 */}
             <TextField
                 fullWidth
                 label="残高"
@@ -92,6 +92,7 @@ export default function CustomIconCorrection({
                 sx={{ mb: 2 }}
             />
 
+            {/* 毎月の積立 */}
             <TextField
                 fullWidth
                 label="毎月の積立"
@@ -103,6 +104,7 @@ export default function CustomIconCorrection({
                 sx={{ mb: 2 }}
             />
 
+            {/* 保存ボタン */}
             <Box sx={{ textAlign: 'right' }}>
                 <Button variant="contained" onClick={handleSave}>
                     保存
