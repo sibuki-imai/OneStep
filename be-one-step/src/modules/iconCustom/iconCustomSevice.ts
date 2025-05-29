@@ -131,17 +131,52 @@ export class iconCustomService {
             });
         }
     }
+    static async oneGet(getitem: {
+        // 受け取る変数名：型;
+        userId: string;
+        customId: number;
+    }) {
+        const transaction = await sequelize.transaction();
 
+        try {
+            const result = await iconCustomRepository.oneGet({
+                // DBカラム名： 受け取ったJSON名.中身名
+                unique_user_id: getitem.userId,
+                custom_id: getitem.customId,
+            });
+
+            // トランザクションをコミット
+            await transaction.commit();
+
+            return {
+                //返す変数名
+                result,
+            };
+        } catch (error) {
+            // エラーが発生した場合、トランザクションをロールバック
+            await transaction.rollback();
+            console.error('情報の取得取得に失敗しました(Service)', error);
+
+            if (error instanceof CustomError) {
+                throw error; // CustomErrorのステータスとメッセージをそのまま投げる
+            }
+
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'データベースへの保存で問題が発生しました',
+                status: 500, // 予期しないエラーの場合は500を投げる
+            });
+        }
+    }
+    // 修正
     static async itemChange(changeitem: {
         // 受け取る変数名：型;
         userId: string;
         iconId: number;
         customId: number;
-        userIconNumber: number;
         iconNaming: string;
         fixedAmount: number;
         userSaving: number;
-        tentative: boolean;
     }) {
         const transaction = await sequelize.transaction();
 
@@ -150,12 +185,11 @@ export class iconCustomService {
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
                     unique_user_id: changeitem.userId,
+                    custom_id: changeitem.customId,
                     icon_id: changeitem.iconId,
-                    user_icon_number: changeitem.userIconNumber,
                     icon_naming: changeitem.iconNaming,
                     fixed_amount: changeitem.fixedAmount,
                     user_saving: changeitem.userSaving,
-                    tentative: changeitem.tentative,
                 },
                 { transaction }
             );

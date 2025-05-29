@@ -4,7 +4,6 @@ import iconCustomService from './iconCustomSevice';
 import Icon from '../../models/iconModel';
 import idAcquisition from '../certification/idAcquisition';
 import CustomIcon from '../../models/iconCustomModel';
-import { promises } from 'dns';
 
 dotenv.config();
 export class iconCustomController {
@@ -132,7 +131,33 @@ export class iconCustomController {
             return;
         }
     }
+    // 取得(単発)
+    public static async oneGet(req: Request, res: Response): Promise<void> {
+        try {
+            const userId = await idAcquisition(req);
+            const customId = Number(req.params.customid);
+            // console.log('確認', customId);
+            if (!userId) {
+                console.log('ID未取得');
+                return;
+            }
+            const result = await iconCustomService.oneGet({
+                userId,
+                customId,
+            });
 
+            res.status(200).json({
+                message: '情報の取得に成功しました',
+                data: result,
+            });
+        } catch (error) {
+            console.log('情報の取得に失敗しました');
+            res.status(400).json({
+                message: '情報の取得に失敗しました',
+            });
+            // return;
+        }
+    }
     // 修正（単発）
     public static async itemChange(req: Request, res: Response): Promise<void> {
         try {
@@ -141,15 +166,8 @@ export class iconCustomController {
                 console.log('ID未取得');
                 return;
             }
-            const {
-                customId,
-                iconId,
-                userIconNumber,
-                iconNaming,
-                fixedAmount,
-                userSaving,
-                tentative,
-            } = req.body;
+            const { customId, iconId, iconNaming, fixedAmount, userSaving } =
+                req.body;
 
             const changeItem = await CustomIcon.findOne({
                 where: {
@@ -169,11 +187,9 @@ export class iconCustomController {
                 userId,
                 customId,
                 iconId,
-                userIconNumber,
                 iconNaming,
                 fixedAmount,
                 userSaving,
-                tentative,
             });
 
             res.status(200).json({

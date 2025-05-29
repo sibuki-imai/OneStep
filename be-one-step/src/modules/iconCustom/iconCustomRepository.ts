@@ -1,7 +1,8 @@
 import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
+import IconModel from '../../models/iconModel';
 import CustomError from '../../../config/customError';
-import { utimes } from 'fs';
+import { response } from 'express';
 
 interface iconType {
     // カラム名:　型名；
@@ -28,11 +29,10 @@ interface RegistrationType {
 interface UpdateType {
     unique_user_id: string;
     icon_id: number;
-    user_icon_number: number;
+    custom_id: number;
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
-    tentative: boolean;
 }
 interface NewListType {
     custom_number?: number;
@@ -74,6 +74,14 @@ interface pathType {
         icon_path: string;
     };
 }
+interface OneGetType {
+    custom_id: number;
+    icon_id: number;
+    icon_naming: string;
+    fixed_amount: number;
+    user_saving: number;
+    icon_path: string;
+}
 
 // Partial型の定義
 
@@ -85,6 +93,7 @@ export type PartialDeleteType = Partial<DeleteType>;
 export type PartialUpdateType = Partial<UpdateType>;
 export type PartialNewListType = Partial<NewListType>;
 export type PartialUpDataListType = Partial<UpDataListType>;
+export type PartialOneGetType = Partial<OneGetType>;
 
 class iconCustomRepository {
     // 単発追加
@@ -349,21 +358,82 @@ class iconCustomRepository {
             });
         }
     }
+
+    // 単発GET
+    static async oneGet(data: DeleteType): Promise<boolean> {
+        try {
+            // Promise<DeleteType>
+            const before = await IconCustomModel.findOne({
+                where: {
+                    unique_user_id: data.unique_user_id,
+                    custom_id: data.custom_id,
+                },
+                attributes: [
+                    'custom_id',
+                    'icon_id',
+                    'icon_naming',
+                    'fixed_amount',
+                    'user_saving',
+                ],
+            });
+            if (!before) {
+                throw new Error('情報の未取得');
+            }
+            // console.log('テストテスト', before.dataValues);
+            const iconPath = await IconModel.findOne({
+                where: {
+                    icon_id: before.dataValues.icon_id,
+                },
+                attributes: ['icon_path'],
+            });
+            if (!iconPath) {
+                throw new Error('情報の未取得');
+            }
+            const result = { ...before.dataValues, ...iconPath.dataValues };
+            // console.log('確認', result);
+            return result;
+        } catch (error) {
+            console.error('取得失敗', error);
+            throw new CustomError({
+                name: '取得エラー',
+                message: 'エラーメッセージ:取得中にエラーが発生しました。',
+                status: 400,
+            });
+        }
+    }
+
     // 変更
     static async itemChange(
         data: UpdateType,
         options?: any
     ): Promise<UpdateType> {
         try {
-            const { unique_user_id, ...updateData } = data;
-            const [count, rows] = await IconCustomModel.update(updateData, {
-                where: { unique_user_id },
+            const [count, rows] = await IconCustomModel.update(data, {
+                where: {
+                    custom_id: data.custom_id,
+                    unique_user_id: data.unique_user_id,
+                },
                 returning: true,
                 ...options,
             });
 
-            if (count === 0) {
-                throw new Error('対象データが見つかりませんでした');
+            if (count === 0 || !rows[0]) {
+                const latest = await IconCustomModel.findOne({
+                    where: {
+                        custom_id: data.custom_id,
+                        unique_user_id: data.unique_user_id,
+                    },
+                });
+
+                if (!latest) {
+                    throw new CustomError({
+                        name: '取得エラー',
+                        message: '対象のデータが存在しません',
+                        status: 400,
+                    });
+                }
+
+                return latest.toJSON() as UpdateType;
             }
 
             return rows[0].toJSON() as UpdateType;

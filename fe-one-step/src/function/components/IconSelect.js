@@ -59,7 +59,7 @@ export default function IconSelect({ onChange }) {
                         key={item.custom_id}
                         onClick={() => {
                             setSelectedId(item.custom_id);
-                            onChange(item.custom_id); // ← これはクリック時にだけ実行されるのでOK
+                            onChange(item.custom_id);
                         }}
                         sx={{
                             display: 'flex',
