@@ -33,7 +33,7 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": " HTTPS=true SSL_CRT_FILE=~/OneStep/ssl/localhost.pem SSL_KEY_FILE=~/OneStep/ssl/localhost-key.pem react-scripts start",
+        "start": " HTTPS=true SSL_CRT_FILE=~/development/OneStep/ssl/localhost.pem SSL_KEY_FILE=~/development/OneStep/ssl/localhost-key.pem react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"

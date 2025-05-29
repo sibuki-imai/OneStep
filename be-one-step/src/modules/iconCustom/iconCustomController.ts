@@ -4,8 +4,6 @@ import iconCustomService from './iconCustomSevice';
 import Icon from '../../models/iconModel';
 import idAcquisition from '../certification/idAcquisition';
 import CustomIcon from '../../models/iconCustomModel';
-import { promises } from 'dns';
-import { request } from 'http';
 
 dotenv.config();
 export class iconCustomController {
@@ -168,15 +166,8 @@ export class iconCustomController {
                 console.log('ID未取得');
                 return;
             }
-            const {
-                customId,
-                iconId,
-                userIconNumber,
-                iconNaming,
-                fixedAmount,
-                userSaving,
-                tentative,
-            } = req.body;
+            const { customId, iconId, iconNaming, fixedAmount, userSaving } =
+                req.body;
 
             const changeItem = await CustomIcon.findOne({
                 where: {
@@ -196,11 +187,9 @@ export class iconCustomController {
                 userId,
                 customId,
                 iconId,
-                userIconNumber,
                 iconNaming,
                 fixedAmount,
                 userSaving,
-                tentative,
             });
 
             res.status(200).json({

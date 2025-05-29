@@ -44,7 +44,14 @@ export default function CustomIcon() {
         >
             {openModal && editingIndex !== null && (
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
-                    <Box>
+                    <Box
+                        sx={{
+                            outline: 'none', // フォーカスリング無効
+                            border: 'none', // 枠線削除
+                            boxShadow: 'none', // 影を削除
+                            backgroundColor: 'transparent', // 背景も透明化（必要なら）
+                        }}
+                    >
                         <CustomIconCorrection
                             editingId={editingIndex}
                             onClose={() => setOpenModal(false)}

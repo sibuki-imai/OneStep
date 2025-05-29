@@ -174,11 +174,9 @@ export class iconCustomService {
         userId: string;
         iconId: number;
         customId: number;
-        userIconNumber: number;
         iconNaming: string;
         fixedAmount: number;
         userSaving: number;
-        tentative: boolean;
     }) {
         const transaction = await sequelize.transaction();
 
@@ -187,12 +185,11 @@ export class iconCustomService {
                 {
                     // DBカラム名： 受け取ったJSON名.中身名
                     unique_user_id: changeitem.userId,
+                    custom_id: changeitem.customId,
                     icon_id: changeitem.iconId,
-                    user_icon_number: changeitem.userIconNumber,
                     icon_naming: changeitem.iconNaming,
                     fixed_amount: changeitem.fixedAmount,
                     user_saving: changeitem.userSaving,
-                    tentative: changeitem.tentative,
                 },
                 { transaction }
             );

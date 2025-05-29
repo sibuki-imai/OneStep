@@ -2,6 +2,7 @@ import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
 import IconModel from '../../models/iconModel';
 import CustomError from '../../../config/customError';
+import { response } from 'express';
 
 interface iconType {
     // カラム名:　型名；
@@ -28,11 +29,10 @@ interface RegistrationType {
 interface UpdateType {
     unique_user_id: string;
     icon_id: number;
-    user_icon_number: number;
+    custom_id: number;
     icon_naming: string;
     fixed_amount: number;
     user_saving: number;
-    tentative: boolean;
 }
 interface NewListType {
     custom_number?: number;
@@ -408,15 +408,32 @@ class iconCustomRepository {
         options?: any
     ): Promise<UpdateType> {
         try {
-            const { unique_user_id, ...updateData } = data;
-            const [count, rows] = await IconCustomModel.update(updateData, {
-                where: { unique_user_id },
+            const [count, rows] = await IconCustomModel.update(data, {
+                where: {
+                    custom_id: data.custom_id,
+                    unique_user_id: data.unique_user_id,
+                },
                 returning: true,
                 ...options,
             });
 
-            if (count === 0) {
-                throw new Error('対象データが見つかりませんでした');
+            if (count === 0 || !rows[0]) {
+                const latest = await IconCustomModel.findOne({
+                    where: {
+                        custom_id: data.custom_id,
+                        unique_user_id: data.unique_user_id,
+                    },
+                });
+
+                if (!latest) {
+                    throw new CustomError({
+                        name: '取得エラー',
+                        message: '対象のデータが存在しません',
+                        status: 400,
+                    });
+                }
+
+                return latest.toJSON() as UpdateType;
             }
 
             return rows[0].toJSON() as UpdateType;
