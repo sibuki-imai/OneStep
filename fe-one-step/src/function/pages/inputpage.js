@@ -48,7 +48,7 @@ function InputInner() {
                 amount,
                 memo,
             };
-            console.log('確認', payload);
+            // console.log('確認', payload);
 
             const result = await axios.post(
                 `${process.env.REACT_APP_BE_DOMAIN}/api/input/new`,

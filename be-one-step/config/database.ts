@@ -42,7 +42,20 @@ const syncDatabase = async (): Promise<void> => {
         // DB同期を実行
         // force: false でテーブルが存在しない場合のみ作成
         // force: true で毎回削除し、新しく作成
-        await sequelize.sync({ force: true });
+        if (process.env.DBRESET === 'true') {
+            // 毎回リセット
+            console.log('リセット');
+            await sequelize.sync({ force: true });
+        } else if (process.env.DBRESET === 'false') {
+            // 引継ぎ
+            console.log('引継ぎ');
+            await sequelize.sync({ force: false });
+        } else {
+            // 本番環境向け
+            console.log('本番');
+            await sequelize.sync({ alter: true });
+        }
+
         console.log('同期しました。');
 
         // 初期データの挿入を実行

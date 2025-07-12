@@ -78,6 +78,18 @@ export class auth {
             res.redirect(`${process.env.BE_DOMAIN}/api/user/information`);
         } catch (error) {
             console.error('Google SSO 認証エラー:', error);
+            res.cookie(`${process.env.COOKIE_NAME_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
+            res.cookie(`${process.env.COOKIE_VALUE_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
             res.status(500).json({ error: 'Google認証に失敗しました' });
         }
     }
@@ -151,6 +163,18 @@ export class auth {
             res.redirect(`${process.env.FE_DOMAIN}/record-input`);
         } catch (error) {
             console.error('Google ユーザー情報取得エラー:', error);
+            res.cookie(`${process.env.COOKIE_NAME_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
+            res.cookie(`${process.env.COOKIE_VALUE_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
             res.status(500).json({ error: 'Failed to get Google user info' });
             res.redirect(`${process.env.FE_DOMAIN}/errorpage`);
         }
@@ -218,6 +242,18 @@ export class auth {
                 UserName: name,
             });
         } catch (error) {
+            res.cookie(`${process.env.COOKIE_NAME_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
+            res.cookie(`${process.env.COOKIE_VALUE_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
             console.error('Google API ユーザー情報取得エラー:', error);
             res.status(400).json({ error: '情報取得エラー' });
         }
@@ -237,6 +273,18 @@ export class auth {
 
             res.status(200);
         } catch (error) {
+            res.cookie(`${process.env.COOKIE_NAME_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
+            res.cookie(`${process.env.COOKIE_VALUE_INDIVIDUAL}`, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'strict',
+                maxAge: 0,
+            });
             console.error('Google API ユーザー情報取得エラー:', error);
             res.status(400).json({ error: '情報取得エラー' });
         }

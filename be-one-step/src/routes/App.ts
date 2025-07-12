@@ -7,6 +7,7 @@ import authRoutes from './authRoutes';
 import iconRoutes from './iconCustomRoutes';
 import commonIconRoutes from './commonIconRoutes';
 import inputRoutes from './inputRoutes';
+import reportRoutes from './reportRoutes';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/user/setting', userRoutes);
 app.use('/api/icon', iconRoutes);
 app.use('/api/common/icon', commonIconRoutes);
 app.use('/api/input', inputRoutes);
+app.use('/api/report', reportRoutes);
 
 // app.use(
 //     (

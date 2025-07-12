@@ -1,12 +1,12 @@
 import React from 'react';
 import Menuber from '../components/parts/iconlogo';
-import BudegetAll from '../components/budegetAll';
+import BudgetAll from '../components/budgetAll';
 
 function budgetPage() {
     return (
         <div>
             <Menuber />
-            <BudegetAll />
+            <BudgetAll />
         </div>
     );
 }
