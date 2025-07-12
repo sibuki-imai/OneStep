@@ -1,0 +1,29 @@
+{
+    // 保存時にフォーマットを適用
+    "editor.formatOnSave": true,
+    
+    // Prettier をデフォルトフォーマッターとして指定
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  
+    // ESLint の対象ディレクトリを設定
+    "eslint.workingDirectories": [
+      { "directory": "./FE", "changeProcessCWD": true },
+      { "directory": "./BE", "changeProcessCWD": true }
+    ],
+  
+    // ESLint の自動修正を保存時に有効化
+    "eslint.autoFixOnSave": true,
+  
+    // ESLint の対象言語
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    }
+  }
+
+  
