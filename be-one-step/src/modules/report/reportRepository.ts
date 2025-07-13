@@ -2,7 +2,7 @@ import { UniqueConstraintError } from 'sequelize';
 import UserInput from '../../models/userInputModel';
 import UserCustom from '../../models/iconCustomModel';
 import IconModel from '../../models/iconModel';
-import CustomError from '../../../config/customError';
+import CustomError from '../../config/customError';
 
 interface UserType {
     unique_user_id: string;

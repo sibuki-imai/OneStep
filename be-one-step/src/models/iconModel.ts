@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import pool from '../../config/database';
+import pool from '../config/database';
 
 const Icon = pool.define(
     'Icon',

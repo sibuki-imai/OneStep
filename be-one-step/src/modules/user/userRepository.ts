@@ -1,7 +1,7 @@
 import { UniqueConstraintError } from 'sequelize';
 import User from '../../models/userModel';
 import Invitation from '../../models/invitationModel';
-import CustomError from '../../../config/customError';
+import CustomError from '../../config/customError';
 
 // userテーブルの型定義
 interface UserType {

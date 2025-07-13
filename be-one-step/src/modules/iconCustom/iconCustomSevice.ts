@@ -1,5 +1,5 @@
-import sequelize from '../../../config/database';
-import CustomError from '../../../config/customError';
+import sequelize from '../../config/database';
+import CustomError from '../../config/customError';
 import iconCustomRepository from './iconCustomRepository';
 // import CustomIcon from '../../models/iconCustomModel';
 import nextIconNumber from './userIconNumberGet';

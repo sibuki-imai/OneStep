@@ -1,7 +1,7 @@
 import { UniqueConstraintError } from 'sequelize';
 import UserInput from '../../models/userInputModel';
 import UserCustom from '../../models/iconCustomModel';
-import CustomError from '../../../config/customError';
+import CustomError from '../../config/customError';
 import IconModel from '../../models/iconModel';
 
 // userテーブルの型定義

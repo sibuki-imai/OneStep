@@ -35,12 +35,12 @@ if (process.env.DBRESET === 'Actual') {
 
 const runSeeders = async (): Promise<void> => {
     const { default: invitationSeeder } = await import(
-        '../src/seeders/invitationSeeder'
+        '../seeders/invitationSeeder'
     );
-    const { default: userSeeder } = await import('../src/seeders/userSeeder');
-    const { default: iconSeeder } = await import('../src/seeders/iconSeeder');
+    const { default: userSeeder } = await import('../seeders/userSeeder');
+    const { default: iconSeeder } = await import('../seeders/iconSeeder');
     const { default: custoIconSeeder } = await import(
-        '../src/seeders/customIconSeeder'
+        '../seeders/customIconSeeder'
     );
 
     await invitationSeeder();

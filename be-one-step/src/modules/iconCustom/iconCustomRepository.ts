@@ -1,7 +1,7 @@
 import Icon from '../../models/iconModel';
 import IconCustomModel from '../../models/iconCustomModel';
 import IconModel from '../../models/iconModel';
-import CustomError from '../../../config/customError';
+import CustomError from '../../config/customError';
 import { response } from 'express';
 
 interface iconType {
