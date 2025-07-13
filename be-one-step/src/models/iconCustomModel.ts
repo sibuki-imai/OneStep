@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import pool from '../../config/database';
+import pool from '../config/database';
 import User from './userModel';
 import Icon from './iconModel';
 

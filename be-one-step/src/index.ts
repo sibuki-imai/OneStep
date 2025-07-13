@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import app from './routes/App';
-import sequelize from '../config/database';
+import sequelize from './config/database';
 import fs from 'fs';
 import https from 'https';
 

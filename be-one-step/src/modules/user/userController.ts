@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import CustomError from '../../../config/customError';
+import CustomError from '../../config/customError';
 import userService from './userService';
 import User from '../../models/userModel';
 import Invitation from '../../models/invitationModel';

@@ -1,5 +1,5 @@
-import sequelize from '../../../config/database';
-import CustomError from '../../../config/customError';
+import sequelize from '../../config/database';
+import CustomError from '../../config/customError';
 import userRepository from './userRepository';
 import iconCustomRepository from '../iconCustom/iconCustomRepository';
 

@@ -1,5 +1,5 @@
-import sequelize from '../../../config/database';
-import CustomError from '../../../config/customError';
+import sequelize from '../../config/database';
+import CustomError from '../../config/customError';
 import inputRepository from './inputRepository';
 
 export class inputService {
