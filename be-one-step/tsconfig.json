@@ -3,7 +3,7 @@
         "target": "ESNext",
         "module": "CommonJS",
         "outDir": "./dist", // コンパイル後の出力フォルダ
-        "rootDir": "./", // ソースコードのルートフォルダ
+        "rootDir": "./src", // ソースコードのルートフォルダ
         "strict": true, // 厳密な型チェックを有効化
         "esModuleInterop": true, // ES6モジュールの互換性
         "skipLibCheck": true, // 外部ライブラリの型チェックをスキップ
