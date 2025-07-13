@@ -21,7 +21,7 @@ app.use(
         methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     })
 );
-console.log('Appの起動');
+
 app.use('/debug', confirmationRoutes);
 app.use('/api/user', authRoutes);
 app.use('/api/user/setting', userRoutes);
@@ -30,6 +30,10 @@ app.use('/api/common/icon', commonIconRoutes);
 app.use('/api/input', inputRoutes);
 app.use('/api/report', reportRoutes);
 
+console.log('Appの起動');
+app.get('/', (_req, res) => {
+    res.send('Server is alive!');
+});
 // app.use(
 //     (
 //         err: any,
