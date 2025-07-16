@@ -11,6 +11,7 @@ interface UserType {
     invitation_id: number;
     authority_flag: boolean;
     registration_flag: boolean;
+    email_flag: boolean;
     created_at: Date;
     updated_at: Date;
     deleted_at?: Date | null; // ソフトデリートされた場合の削除日時、nullの場合は削除されていない
@@ -30,10 +31,25 @@ interface UserPromotionType {
     registration_flag: boolean;
 }
 
+interface EmailRegistrationType {
+    unique_user_id: String;
+    email: string;
+    invitation_id: number;
+    invitation_code: string;
+    authority_flag: boolean;
+    registration_flag: boolean;
+    email_flag: boolean;
+    password: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at?: Date | null;
+}
+
 // Partial型の定義
 export type PartialUserType = Partial<UserType>;
 export type PartialInvitationType = Partial<InvitationType>;
 export type PartialUserPromotionType = Partial<UserPromotionType>;
+export type PartialEmailRegistrationType = Partial<EmailRegistrationType>;
 
 class userRepository {
     static async createUser(
@@ -121,6 +137,68 @@ class userRepository {
                     },
                     ...options,
                 }
+            );
+
+            return true;
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    static async EmailRegistration(
+        data: PartialEmailRegistrationType,
+        options?: any
+    ): Promise<boolean> {
+        try {
+            // console.log(data);
+            await User.create(
+                {
+                    unique_user_id: data.unique_user_id,
+                    email: data.email,
+                    name: data.email,
+                    invitation_id: data.invitation_id,
+                    authority_flag: false,
+                    registration_flag: false,
+                    email_flag: true,
+                    password: data.password,
+                },
+                options
+            );
+
+            return true;
+        } catch (error) {
+            console.error('入力内容に問題があります。(Repository)', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message: 'エラーメッセージ:入力内容に問題があります。',
+                status: 400,
+            });
+        }
+    }
+
+    // EmailLogin
+    static async EmailLogin(
+        data: PartialEmailRegistrationType,
+        options?: any
+    ): Promise<boolean> {
+        try {
+            await User.create(
+                {
+                    unique_user_id: data.unique_user_id,
+                    email: data.email,
+                    name: data.email,
+                    invitation_id: data.invitation_id,
+                    authority_flag: false,
+                    registration_flag: false,
+                    email_flag: true,
+                    password: data.password,
+                },
+                options
             );
 
             return true;

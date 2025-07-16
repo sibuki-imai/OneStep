@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import CryptoJS from 'crypto-js';
 import CustomError from '../../config/customError';
 import userService from './userService';
 import User from '../../models/userModel';
@@ -103,6 +104,136 @@ export class userController {
                 message: '設定に失敗しました',
             });
             return;
+        }
+    }
+
+    // Email
+
+    public static async EmailRegistration(
+        req: Request,
+        res: Response
+    ): Promise<void> {
+        try {
+            const { userEmail, userPassword, invitationCode } = req.body;
+            const passcheck = await Invitation.findOne({
+                where: { invitation_code: invitationCode },
+            });
+
+            if (!passcheck) {
+                console.log('招待コードが異なります');
+                res.status(400).json({
+                    message: '招待コードが異なります',
+                });
+                return;
+            }
+
+            const judgmentEmail = await User.findOne({
+                where: { email: userEmail },
+            });
+            if (judgmentEmail) {
+                console.log('こちらのアカウントは作成済みです');
+                res.status(400).json({
+                    message: 'こちらのアカウントは作成済みです',
+                });
+                return;
+            }
+
+            const usecheck = await Invitation.findOne({
+                where: { invitation_code: invitationCode, unused_flag: true },
+                attributes: ['invitation_id', 'invitation_code', 'unused_flag'],
+            });
+
+            if (!usecheck) {
+                console.log('入力された招待コードは使用済みです');
+                res.status(400).json({
+                    message: '入力された招待コードは使用済みです',
+                });
+                return;
+            }
+            const invitationNumber = usecheck?.dataValues.invitation_id;
+
+            const result = await userService.EmailRegistration({
+                userEmail,
+                userPassword,
+                invitationNumber,
+                invitationCode,
+            });
+            res.status(200).json({
+                message: 'ユーザー登録が成功しました',
+                data: result,
+            });
+        } catch (error) {
+            console.error('エラーの内容:', error);
+            throw new CustomError({
+                name: '作成エラー',
+                message:
+                    'エラーが発生しました。時間をおいてもう一度お試しください。',
+                status: 400,
+            });
+        }
+    }
+
+    // EmailLogin
+    public static async EmailLogin(req: Request, res: Response): Promise<void> {
+        try {
+            const { userEmail, userPassword } = req.body;
+            //  登録確認
+            const hash = CryptoJS.SHA256(userPassword).toString();
+            const judgmentEmail = await User.findOne({
+                where: { email: userEmail, password: hash, email_flag: true },
+            });
+            if (!judgmentEmail) {
+                console.log('EmailまたはPASSWORDが異なります');
+                res.status(400).json({
+                    message: 'EmailまたはPASSWORDが異なります',
+                });
+                return;
+            }
+            // console.log('出', judgmentEmail.dataValues.unique_user_id);
+
+            // Cookieの付与
+            const encryptedopenId = CryptoJS.AES.encrypt(
+                judgmentEmail.dataValues.unique_user_id,
+                `${process.env.COOKIE_VALUE_INDIVIDUAL}`
+            ).toString();
+
+            res.cookie(
+                `${process.env.COOKIE_NAME_INDIVIDUAL}`,
+                encryptedopenId,
+                {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: 'none',
+                    maxAge: 60 * 24 * 60 * 60 * 1000,
+                    //60*60*1000 ->1h
+                    //24*60*60*1000 ->24h
+                }
+            );
+
+            const judgment = await User.findOne({
+                where: {
+                    unique_user_id: judgmentEmail.dataValues.unique_user_id,
+                    registration_flag: true,
+                },
+            });
+            if (!judgment) {
+                res.status(200).json({
+                    redirect: `${process.env.FE_DOMAIN}/tutorial`,
+                });
+                return;
+            }
+            res.status(200).json({
+                message: 'ログインが成功しました',
+                data: judgmentEmail,
+            });
+        } catch (error) {
+            console.error('エラーの内容:', error);
+            throw new CustomError({
+                name: 'ログインが失敗しました',
+                message:
+                    'エラーが発生しました。時間をおいてもう一度お試しください。',
+                status: 400,
+            });
         }
     }
 }
