@@ -16,6 +16,7 @@ const seedUser = async () => {
                     invitation_id: 1,
                     authority_flag: true,
                     registration_flag: true,
+                    email_flag: false,
                 },
 
                 {
@@ -25,6 +26,7 @@ const seedUser = async () => {
                     invitation_id: 2,
                     authority_flag: false,
                     registration_flag: false,
+                    email_flag: false,
                 },
             ]);
 

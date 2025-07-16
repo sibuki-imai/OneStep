@@ -29,25 +29,25 @@ const Button = styled(BaseButton)(
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1.5;
-  background-color: ${blue[500]};
+  background-color: var(--btn-bg, ${blue[500]});
   padding: 8px 16px;
   border-radius: 8px;
   color: white;
   transition: all 150ms ease;
   cursor: pointer;
-  border: 1px solid ${blue[500]};
+  border: 1px solid var(--btn-border, ${blue[500]});
   box-shadow: 0 2px 1px ${
       theme.palette.mode === 'dark'
           ? 'rgba(0, 0, 0, 0.5)'
           : 'rgba(45, 45, 60, 0.2)'
-  }, inset 0 1.5px 1px ${blue[400]}, inset 0 -2px 1px ${blue[600]};
+  }, inset 0 1.5px 1px var(--btn-inset1, ${blue[400]}), inset 0 -2px 1px var(--btn-inset2, ${blue[600]});
 
   &:hover {
-    background-color: ${blue[600]};
+    background-color: var(--btn-bg-hover, ${blue[600]});
   }
 
   &:active {
-    background-color: ${blue[700]};
+    background-color: var(--btn-bg-active, ${blue[700]});
     box-shadow: none;
     transform: scale(0.99);
   }

@@ -40,7 +40,13 @@ const User = pool.define(
             type: DataTypes.BOOLEAN,
             allowNull: false, // 必須
         },
-
+        email_flag: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false, // 必須
+        },
+        password: {
+            type: DataTypes.STRING(255),
+        },
         created_at: {
             type: DataTypes.DATE,
             allowNull: false, // 必須

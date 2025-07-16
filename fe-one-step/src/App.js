@@ -10,6 +10,8 @@ import ErrorPage from './function/pages/errorpage';
 import TutorialPage from './function/pages/tutorialpage';
 import BudgetPage from './function/pages/budgetPage';
 import ReportPage from './function/pages/reportPage';
+import EmailRegistration from './function/pages/emailRegistration';
+import EmailLogin from './function/pages/emailLogin';
 // import Donkit from './function/pages/SimpleSortablePage';
 
 function App() {
@@ -38,6 +40,15 @@ function App() {
                     <Route
                         path="/account/registration"
                         element={<Registration />}
+                    />
+                    {/* Email登録ページ */}
+                    <Route
+                        path="/account/registration/email"
+                        element={<EmailRegistration />}
+                    />
+                    <Route
+                        path="/accout/email/login"
+                        element={<EmailLogin />}
                     />
                     {/* <Route path="/donkit" element={<Donkit />} /> */}
                 </Routes>

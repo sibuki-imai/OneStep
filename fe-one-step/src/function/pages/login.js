@@ -15,8 +15,11 @@ function Login() {
             `&access_type=offline&state=`;
     };
 
-    const debug = () => {
-        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/debug`;
+    const emailRegistration = () => {
+        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/account/registration/email`;
+    };
+    const emailLogin = () => {
+        window.location.href = `${process.env.REACT_APP_FE_DOMAIN}/accout/email/login`;
     };
 
     return (
@@ -29,10 +32,34 @@ function Login() {
                     Googleでログイン
                 </MuiButton>
             </Box>
-            <Box>
-                <MuiButton type="button" onClick={debug}>
-                    debug用
+            <Box sx={{ display: 'flex', marginTop: '3vh', marginLeft: '15%' }}>
+                <MuiButton
+                    sx={{
+                        width: '150px',
+                        '--btn-bg': '#009900',
+                        '--btn-border': '#009900',
+                        '--btn-inset1': '#33b333',
+                        '--btn-inset2': '#008000',
+                        '--btn-bg-hover': '#008000',
+                        '--btn-bg-active': '#006600',
+                    }}
+                    type="button"
+                    onClick={emailRegistration}
+                >
+                    emailで登録
                 </MuiButton>
+                <MuiButton
+                    sx={{ marginLeft: '3vw' }}
+                    type="button"
+                    onClick={emailLogin}
+                >
+                    emailでログイン
+                </MuiButton>
+            </Box>
+            <Box sx={{ marginLeft: '15%' }}>
+                現在Googleサインインは
+                <br />
+                申請中の為利用できません。
             </Box>
         </div>
     );
