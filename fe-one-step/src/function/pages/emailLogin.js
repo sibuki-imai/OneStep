@@ -83,7 +83,7 @@ function EmailLogin() {
                 <Typography variant="h5">ようこそ！</Typography>
             </Box>
             <h5 style={{ textAlign: 'center' }}>
-                下記にEmail,パスワード、を入力の上、
+                下記にEmail,パスワード、を入力の上
                 <br />
                 ログインボタンをクリックしてください
             </h5>
