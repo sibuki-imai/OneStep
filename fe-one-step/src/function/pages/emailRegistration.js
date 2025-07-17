@@ -121,7 +121,6 @@ function EmailRegistration() {
                     type="button"
                     onClick={handle}
                     sx={{ marginTop: '10px' }}
-                    disabled={!userEmail || !userPassword || !invitationCode}
                 >
                     登録する
                 </MuiButton>
